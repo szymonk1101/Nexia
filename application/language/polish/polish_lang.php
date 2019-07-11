@@ -9,3 +9,5 @@ $lang['LoginSuccessful'] = 'Zalogowano pomyślnie.';
 $lang['LogoutSuccessful'] = 'Wylogowano pomyślnie.';
 $lang['InvalidLoginData'] = 'Nieprawidłowe dane logowania.';
 $lang['YouAccountIsInactive'] = 'Twoje konto jest nieaktywne.';
+$lang['YouMustLoggedIn'] = 'Musisz się zalogować, aby uzyskać tutaj dostęp.';
+$lang['AccountCreatedSuccessful'] = 'Zostałeś pomyślnie zarejestrowany.';

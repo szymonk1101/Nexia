@@ -3,14 +3,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth_model extends CI_Model  {
     
-    protected $identity_column = 'email';
-    protected $remember_life_time = 1000*60*60*24;
-    protected $token_life_time = 1000*60*60;
+    protected $identity_column;
+    protected $remember_life_time;
+    protected $token_life_time;
+    protected $token_cookie_name;
+    protected $token_header_name;
+    protected $remember_cookie_name;
+    protected $cookie_domain;
+    protected $cookie_secure;
+    protected $cookie_httponly;
 
 	public function __construct()
 	{
         parent::__construct();
         $this->load->database();
+
+        $this->identity_column = $this->config->item('identity_column');
+        $this->remember_life_time = $this->config->item('remember_life_time');
+        $this->token_life_time = $this->config->item('token_life_time');
+        $this->token_cookie_name = $this->config->item('token_cookie_name');
+        $this->token_header_name = $this->config->item('token_header_name');
+        $this->remember_cookie_name = $this->config->item('remember_cookie_name');
+        $this->cookie_domain = $this->config->item('cookie_domain');
+        $this->cookie_secure = $this->config->item('cookie_secure');
+        $this->cookie_httponly = $this->config->item('cookie_httponly');
     }
 
     public function login($identity, $password, $remember = FALSE)
@@ -66,20 +82,21 @@ class Auth_model extends CI_Model  {
                     'token' => $token,
                     'token_expdate' => $expdate,
                     'remember_code' => $remember_code,
-                    'lastlogin' => $now,
-                    //'ip_address' => (string)$this->input->ip_address(),
+                    'lastlogin' => date('Y-m-d H:i:s', $now),
+                    'ip_address' => (string)$this->input->ip_address(),
                     //'modifiedby' => $user->id,
                     //'datemodified' => date('Y-m-d H:i:s'),
-                    //'login_attempts' => 0,
-                    //'last_login_attempt' => $now,
-                    //'user_agent' => $_SERVER['HTTP_USER_AGENT']
-                ));
+                    'login_attempts' => 0,
+                    'last_login_attempt' => $now,
+                    'user_agent' => $_SERVER['HTTP_USER_AGENT']
+                )
+            );
 
             if($this->db->affected_rows() > 0) {
 
                 //setcookie
-                //setcookie($this->token_cookie_name, $token, $expdate, '/', $this->cookie_domain, $this->cookie_secure, $this->cookie_httponly);
-                //setcookie($this->remember_cookie_name, $remember_code, $remember_expdate, '/', $this->cookie_domain, $this->cookie_secure, $this->cookie_httponly);
+                setcookie($this->token_cookie_name, $token, $expdate, '/', $this->cookie_domain, $this->cookie_secure, $this->cookie_httponly);
+                setcookie($this->remember_cookie_name, $remember_code, $remember_expdate, '/', $this->cookie_domain, $this->cookie_secure, $this->cookie_httponly);
 
                 $result->status = 1;
                 $result->message = lang('LoginSuccessful');
@@ -95,12 +112,12 @@ class Auth_model extends CI_Model  {
                 ->update('users', array(
                     'token' => uniqid(),
                     'token_expdate' => $now,
-                    //'login_attempts' => $user->login_attempts+1,
-                    //'last_login_attempt' => $now,
-                    //'ip_address' => (string)$this->input->ip_address(),
+                    'login_attempts' => $user->login_attempts+1,
+                    'last_login_attempt' => $now,
+                    'ip_address' => (string)$this->input->ip_address(),
                     //'modifiedby' => 0,
                     //'datemodified' => date('Y-m-d H:i:s')
-                    //'user_agent' => $_SERVER['HTTP_USER_AGENT']
+                    'user_agent' => $_SERVER['HTTP_USER_AGENT']
                 ));
             }
 
@@ -121,7 +138,7 @@ class Auth_model extends CI_Model  {
 
             if($remember_code) {
             
-                $query = $this->db->select($this->identity_column.', token')
+                $query = $this->db->select($this->identity_column.', token, user_agent')
                     ->where('remember_code', $remember_code, TRUE)
                     ->get('users')->row();
                 
@@ -129,22 +146,21 @@ class Auth_model extends CI_Model  {
                 {
 
                     //check user agent
-                    //if($query->user_agent !=  $_SERVER['HTTP_USER_AGENT']) {
-                    //    $this->logout();
-                    //}
+                    if($query->user_agent && $query->user_agent !=  $_SERVER['HTTP_USER_AGENT']) {
+                        $this->logout();
+                    }
                     
                     if($refresh_token)
                         $this->update_token_lifetime($query->token); //refresh token expiration
                     
                     return true;
                 }
-
             }
             return false;
 
         } else {
             //check token
-            $query = $this->db->select('token, token_expdate')
+            $query = $this->db->select('token, token_expdate, user_agent')
                 ->where('token', $token, TRUE)
                 ->get('users')->row();
 
@@ -152,19 +168,17 @@ class Auth_model extends CI_Model  {
             {
 
                 //check user agent
-                //if($query->user_agent !=  $_SERVER['HTTP_USER_AGENT']) {
-                //    $this->logout();
-                //}
+                if($query->user_agent && $query->user_agent !=  $_SERVER['HTTP_USER_AGENT']) {
+                    $this->logout();
+                }
 
                 //check token expiration
-                $now = date('Y-m-d H:i:s');
-
+                $now = time();
                 if($query->token_expdate > $now) {
                     if($refresh_token)
                         $this->update_token_lifetime($token); //refresh token expiration
                     
-                    return true
-                
+                    return true;
                 }
             }
         }
@@ -187,11 +201,11 @@ class Auth_model extends CI_Model  {
 
             $this->db->update('users', 
                 array(
-                'token_expdate' => time(),
-                'token' => uniqid(),
-                //'datemodified' => $now,
-                //'modifiedby' => (isset($user->id)) ? $user->id : 0),
-                
+                    'token_expdate' => time(),
+                    'token' => uniqid(),
+                    //'datemodified' => $now,
+                    //'modifiedby' => (isset($user->id)) ? $user->id : 0),
+                ),
                 'token=\''.$token.'\''
             );
         }
@@ -227,59 +241,27 @@ class Auth_model extends CI_Model  {
         if(!isset($additional_data['activation_code']) || empty($additional_data['activation_code'])) {
             $additional_data['activation_code'] = $this->generate_activation_code();
         }
-
-        /*$this->load->model('user_model');
         
         $now = time();
 
-        self::$db->trans_start();
-        $userRef=$this->user_model->getNewUserId();
+        $this->db->trans_start();
         
-        self::$db->insert('users', [
-            'id' => $userRef,
+        $this->db->insert('users', array(
             $this->identity_column => $identity,
             'ip_address' => $ip_address,
-            'username' => $identity,
             'password' => $password,
-            'created_on' => date('Y', $now),
-            'datecreated' => date('Y-m-d H:i:s', $now),
-            'active' => USRST_INACTIVE,
-            'activation_code' => $additional_data['activation_code'],
-            'rodo_acceptance' => (isset($additional_data['rodo_acceptance'])?$additional_data['rodo_acceptance']:0),
-            'accept_reg' => (isset($additional_data['accept_reg'])?$additional_data['accept_reg']:0),
-            'accept_payu' => (isset($additional_data['accept_payu'])?$additional_data['accept_payu']:0),
-            'accept_einvoice' => (isset($additional_data['accept_einvoice'])?$additional_data['accept_einvoice']:0),
-            'accept_mkt_email' => (isset($additional_data['accept_mkt_email'])?$additional_data['accept_mkt_email']:0),
-            'accept_mkt_phone' => (isset($additional_data['accept_mkt_phone'])?$additional_data['accept_mkt_phone']:0),
-            'accept_mkt_data' => (isset($additional_data['accept_mkt_data'])?$additional_data['accept_mkt_data']:0),
-            'accept_mkt_data_share' => (isset($additional_data['accept_mkt_data_share'])?$additional_data['accept_mkt_data_share']:0),
-            'pesel' => ((isset($additional_data['pesel'])&&!empty($additional_data['pesel']))?$additional_data['pesel']:NULL),
-            'data_acceptance' => (isset($additional_data['data_acceptance'])?$additional_data['data_acceptance']:0),// tmp for PGE
-            'createdby' => (empty($operatorid)?$userRef:$operatorid), // !!! $userRef is OK in MA, when called from AP this whould be userId of logged in operator
-            'password_modified' => $now
-        ]);
-        //$userRef = self::$db->insert_id();
+            'created' => date('Y-m-d H:i:s', $now),
+            'active' => USER_INACTIVE,
+            'activation_code' => $additional_data['activation_code']
+        ));
         
-        self::$db->trans_complete();
-        
-        if($userRef) {
-            if(isset($default_group->id) && empty($groups)) {
-                $groups[] = $default_group->id;
-            }
-            
-            if(!empty($groups)) {
-                foreach ($groups as $group) {
-                    $this->add_to_group($group, $userRef);
-                }
-            }
-        }
+        $this->db->trans_complete();
         
         $result->status = 1;
-        $result->message = lang('account_creation_successful');
+        $result->message = lang('AccountCreatedSuccessful');
         $result->data = new stdClass();
-        $result->data->userid = $userRef;
         $result->data->activation_code = $additional_data['activation_code'];
-        return $result;*/
+        return $result;
     }
 
     
@@ -297,6 +279,30 @@ class Auth_model extends CI_Model  {
             $token = isset($_POST[$this->token_cookie_name]) ? $_POST[$this->token_cookie_name] : FALSE;
         }
         return $token;
+    }
+
+    public function getUserId()
+    {
+        $token = $this->getToken();
+        if($token) {
+            $query = $this->db->select('id')->where('token', $token, TRUE)->get('users')->row();
+            if(!empty($query)) {
+                return $query->id;
+            }
+        }
+        return -1;
+    }
+
+    public function getUserIdentity()
+    {
+        $token = $this->getToken();
+        if($token) {
+            $query = $this->db->select($this->identity_column)->where('token', $token, TRUE)->get('users')->row();
+            if(!empty($query)) {
+                return $query->{$this->identity_column};
+            }
+        }
+        return false;
     }
 
     public function update_token_lifetime($token)

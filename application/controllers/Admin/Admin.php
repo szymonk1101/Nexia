@@ -11,7 +11,8 @@ class Admin extends MY_Controller {
 
 	public function index()
 	{
-        
+        $this->checkIsLoggedIn('admin/login');
+
         $this->load->model('openhours_model');
 
         print_r($this->openhours_model->getCompanyOpenHours($this->input->get('company')));
@@ -28,9 +29,37 @@ class Admin extends MY_Controller {
 
     }
     
+    public function login()
+    {
+        $this->load->library('form_validation');
+
+
+
+        if($this->input->method() == 'post')
+        {
+            $login = $this->auth_model->login($this->input->post('identity'), $this->input->post('password'), FALSE);
+
+            if($login->status == 1) {
+                echo 'Zalogowano pomyślnie';
+                if($last_page = $_SESSION['last_page']) {
+                    unset($_SESSION['last_page']);
+                    redirect($last_page);
+                }
+            } else {
+                echo $login->message;
+            }
+        }
+
+        $this->load->view('admin/login');
+    }
+
+    public function logout()
+    {
+        $this->auth_model->logout();
+    }
+
     public function test()
     {
-        echo 'test';
-        echo lang('Home');
+        
     }
 }
