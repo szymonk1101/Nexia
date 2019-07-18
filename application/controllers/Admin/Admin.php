@@ -27,6 +27,7 @@ class Admin extends MY_Controller {
 
         var_dump($this->openhours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00'));
 
+        $this->load->view('admin/index');
     }
     
     public function login()
@@ -60,6 +61,11 @@ class Admin extends MY_Controller {
 
     public function test()
     {
-        
+        if($this->input->method() == 'get')
+        {
+            $this->load->model('notifications_model');
+            $this->notifications_model->addNotification($this->input->get('type'), $this->input->get('content'), $data = null, $this->input->get('recipient'), $created = false, $displayed = null);
+            echo 'poszło';
+        }
     }
 }

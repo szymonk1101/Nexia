@@ -11,3 +11,6 @@ $lang['InvalidLoginData'] = 'Nieprawidłowe dane logowania.';
 $lang['YouAccountIsInactive'] = 'Twoje konto jest nieaktywne.';
 $lang['YouMustLoggedIn'] = 'Musisz się zalogować, aby uzyskać tutaj dostęp.';
 $lang['AccountCreatedSuccessful'] = 'Zostałeś pomyślnie zarejestrowany.';
+
+$lang['Notify_NewReservation'] = 'Pojawiła się nowa rezerwacja.';
+$lang['Notify_NewUser'] = 'Zarejestrował się nowy użytkownik.';

@@ -27,10 +27,10 @@ class MY_Controller extends CI_Controller {
 		// END LOGIN SESSION
 	}
 
-	public function checkIsLoggedIn($redirect)
+	public function checkIsLoggedIn($redirect, $json = false)
     {
         if(!$this->isLoggedIn) {
-            if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            if($json || (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
                 //ajax request
                 $response = new stdClass();
                 $response->status = 0;
@@ -46,5 +46,11 @@ class MY_Controller extends CI_Controller {
             }
         }
         return true;
-    }
+	}
+	
+	public function getUserId()
+	{
+		if(!empty($this->user) && !empty($this->user->id))
+			return $this->user->id;
+	}
 }
