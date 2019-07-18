@@ -305,6 +305,16 @@ class Auth_model extends CI_Model  {
         return false;
     }
 
+    public function getUserHeaderData()
+    {
+        $token = $this->getToken();
+        if($token) {
+            $query = $this->db->select($this->identity_column.', rank, avatar')->where('token', $token, TRUE)->get('users')->row();
+            return $query;
+        }
+        return false;
+    }
+
     public function update_token_lifetime($token)
     {
         if($token != '')

@@ -10,3 +10,5 @@ $config['token_life_time'] = 1000*60*60;
 $config['token_cookie_name'] = 'token';
 $config['token_header_name'] = 'token';
 $config['remember_cookie_name'] = 'remember_token';
+
+$config['avatars_path'] = 'uploads/avatars/';

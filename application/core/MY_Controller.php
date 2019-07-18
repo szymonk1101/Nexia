@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class MY_Controller extends CI_Controller {
 	
 	protected $isLoggedIn;
-	protected $user;
+	public $user;
 
 	public function __construct()
 	{
@@ -22,6 +22,7 @@ class MY_Controller extends CI_Controller {
 			$this->user = new stdClass();
 			//$this->user->data = new stdClass();
 			$this->user->id = $this->auth_model->getUserId();
+			$this->user->data = $this->auth_model->getUserHeaderData();
 			//$this->user->data = $this->ion_auth_model->getUserHeaderData();
 		}
 		// END LOGIN SESSION

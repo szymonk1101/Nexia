@@ -66,7 +66,7 @@
                                 <div class="widget-content-left">
                                     <div class="btn-group">
                                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                            <img width="42" class="rounded-circle" src="<?= base_url('web/admin/images/avatars/1.jpg'); ?>" alt="">
+                                            <img width="42" class="rounded-circle" src="<?= base_url($this->config->item('avatars_path').$this->user->data->avatar); ?>" alt="">
                                             <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                         </a>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
@@ -81,10 +81,10 @@
                                 </div>
                                 <div class="widget-content-left  ml-3 header-user-info">
                                     <div class="widget-heading">
-                                        Alina Mclourd
+                                        <?= $this->user->data->email; ?>
                                     </div>
                                     <div class="widget-subheading">
-                                        VP People Manager
+                                        <?= $this->user->data->rank; ?>
                                     </div>
                                 </div>
                                 <div class="widget-content-right header-user-info ml-3">

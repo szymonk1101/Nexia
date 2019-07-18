@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 18 Lip 2019, 19:47
+-- Czas generowania: 18 Lip 2019, 20:02
 -- Wersja serwera: 10.1.28-MariaDB
 -- Wersja PHP: 7.1.11
 
@@ -164,7 +164,9 @@ CREATE TABLE `users` (
   `ip_address` varchar(32) DEFAULT NULL,
   `login_attempts` int(11) NOT NULL DEFAULT '0',
   `last_login_attempt` int(11) DEFAULT NULL,
-  `user_agent` varchar(255) DEFAULT NULL
+  `user_agent` varchar(255) DEFAULT NULL,
+  `rank` varchar(128) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
