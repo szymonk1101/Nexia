@@ -9,9 +9,13 @@ class Reservations_model extends CI_Model  {
         $this->load->database();
     }
     
-    public function getReservationsByDate($company_ref, $date)
+    public function getReservationsByDate($company_ref, $date, $confirmed = true)
     {
-        return $this->db->query("SELECT * FROM reservations WHERE company_ref = '$company_ref' AND `date` = '$date'")->result();
+        $whr = '';
+        if($confirmed)
+            $whr = ' AND `confirmed` = 1'
+
+        return $this->db->query("SELECT * FROM reservations WHERE company_ref = '$company_ref' AND `date` = '$date'".$whr)->result();
     }
 
 }

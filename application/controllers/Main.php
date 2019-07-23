@@ -5,6 +5,10 @@ class Main extends MY_Controller {
 
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$this->load->model('services_model');
+
+		$this->load->view('reservation', array(
+			'services' => $this->services_model->getCompanyAllServices(1)
+		));
 	}
 }

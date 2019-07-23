@@ -9,5 +9,9 @@ class Services_model extends CI_Model  {
         $this->load->database();
     }
     
+    public function getCompanyAllServices($company_ref)
+    {
+        return $this->db->where('company_ref', $company_ref)->get('services')->result();
+    }
 
 }

@@ -7,6 +7,52 @@ class OpenHours_model extends CI_Model  {
 	{
         parent::__construct();
         $this->load->database();
+        $this->load->model('hours_model');
+    }
+
+    // DO PRZETESTOWANIA
+    public function getOpenHoursByDate($date, $company_ref, $staff_ref = false, $service_ref = false)
+    {
+        $result = new stdClass();
+        $result->time_from = false;
+        $result->time_to = false;
+
+        $exceptions = $this->db->query("SELECT * FROM open_hours_exceptions WHERE `company_ref` = '$company_ref' AND `date` = '$date'")->row();
+
+        if(empty($exceptions) && $staff_ref) {
+            $exceptions = $this->db->query("SELECT * FROM open_hours_exceptions WHERE `staff_ref` = '$staff_ref' AND `date` = '$date'")->row();
+        }
+
+        if(empty($exceptions) && $service_ref) {
+            $exceptions = $this->db->query("SELECT * FROM open_hours_exceptions WHERE `service_ref` = '$service_ref' AND `date` = '$date'")->row();
+        }
+
+        if(!empty($exceptions)) {
+            $result->time_from = $exceptions->time_from;
+            $result->time_to = $exceptions->time_to;
+        }
+        else {
+            $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
+            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
+            if($staff_ref) {
+                $staff_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE staff_ref = '$staff_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
+                if(!empty($staff_open_hours))
+                    $open_hours = $this->hours_model->minimumHours($open_hours, $staff_open_hours);
+            }
+
+            if($service_ref) {
+                $service_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE service_ref = '$service_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
+                if(!empty($service_open_hours))
+                    $open_hours = $this->hours_model->minimumHours($open_hours, $service_open_hours);
+            }
+
+            if(!empty($open_hours)) {
+                $result->time_from = $open_hours->{$dayname.'_from'};
+                $result->time_to = $open_hours->{$dayname.'_to'};
+            }
+        }
+
+        return $result;
     }
     
     /**
