@@ -9,8 +9,10 @@ class Hours_model extends CI_Model  {
         $this->load->database();
     }
 
-
-    // DO PRZETESTOWANIA
+    /**
+     * EVERY TIMES VARIABLES MUST BE IN FORMAT: HH:MM. FOR EXAMPLE 01:01
+     */
+    
     public function minimumHours($hours, $hours_2)
     {
         if($hours->time_from < $hours_2->time_from)
@@ -22,7 +24,6 @@ class Hours_model extends CI_Model  {
         return $hours;
     }
 
-    // DO PRZETESTOWANIA
     public function maximumHours($hours, $hours_2)
     {
         if($hours->time_from > $hours_2->time_from)
@@ -62,9 +63,34 @@ class Hours_model extends CI_Model  {
         return $free;
     }
 
+    // DO PRZETESTOWANIA
     public function mergeHours($hours, $to_merge)
     {
-        
+        foreach($to_merge as $j => $r)
+        {
+            foreach($hours as $k => $block)
+            {
+                if($block['time_to'] >= $r['time_from'] && $block['time_to'] < $r['time_from'])
+                {
+                    $hours[$k]['time_to'] = $r['time_to'];
+                }
+                else if($block['time_from'] <= $r['time_to'] && $block['time_from'] > $r['time_from'])
+                {
+                    $hours[$k]['time_from'] = $r['time_from'];
+                }
+                else if($block['time_to'] < $r['time_from'] || $block['time_from'] > $r['time_to'])
+                {
+                    if(!in_array($r, $hours)) {
+                        array_push($hours, $r);
+                    }
+                }
+
+                print_r($hours);
+                echo '<br />';
+            }
+        }
+
+        return $hours;
     }
 
 

@@ -54,6 +54,8 @@ $route['admin/(:any)/(:any)'] = 'admin/admin_$1/$2';
 $route['admin/(:any)'] = 'admin/admin/$1';
 $route['admin'] = 'admin/admin';
 
+$route['(:any)'] = 'main/$1';
+
 $route['default_controller'] = 'main';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

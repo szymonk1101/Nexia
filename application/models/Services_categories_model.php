@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ServicesCategories_model extends CI_Model  {
+class Services_categories_model extends CI_Model  {
 	
 	public function __construct()
 	{

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class OpenHours_model extends CI_Model  {
+class Open_hours_model extends CI_Model  {
 	
 	public function __construct()
 	{

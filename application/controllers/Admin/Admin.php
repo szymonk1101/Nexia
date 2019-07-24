@@ -13,19 +13,19 @@ class Admin extends MY_Controller {
 	{
         $this->checkIsLoggedIn('admin/login');
 
-        $this->load->model('openhours_model');
+        $this->load->model('open_hours_model');
 
-        print_r($this->openhours_model->getCompanyOpenHours($this->input->get('company')));
+        print_r($this->open_hours_model->getCompanyOpenHours($this->input->get('company')));
 
-        print_r($this->openhours_model->getCompanyOpenHoursByDate($this->input->get('company'), '2019-07-03'));
-
-        echo '<br /><br />';
-
-        print_r($this->openhours_model->getFreeHoursForDate($this->input->get('company'), '2019-07-04'));
+        print_r($this->open_hours_model->getCompanyOpenHoursByDate($this->input->get('company'), '2019-07-03'));
 
         echo '<br /><br />';
 
-        var_dump($this->openhours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00'));
+        print_r($this->open_hours_model->getFreeHoursForDate($this->input->get('company'), '2019-07-04'));
+
+        echo '<br /><br />';
+
+        var_dump($this->open_hours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00'));
 
         $this->load->view('admin/index');
     }
