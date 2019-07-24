@@ -13,7 +13,7 @@ class Reservations_model extends CI_Model  {
     {
         $whr = '';
         if($confirmed)
-            $whr = ' AND `confirmed` = 1'
+            $whr = ' AND `confirmed` = 1';
 
         return $this->db->query("SELECT * FROM reservations WHERE company_ref = '$company_ref' AND `date` = '$date'".$whr)->result();
     }

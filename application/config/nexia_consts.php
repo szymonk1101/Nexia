@@ -9,7 +9,7 @@ define('COMPANY_ACTIVE',    1);
 
 define('RESERVATION_NEW',       0);
 define('RESERVATION_ACCEPTED',  1);
-define('RESERVATION_REJECTED',  2;
+define('RESERVATION_REJECTED',  2);
 define('RESERVATION_FINISHED',  3);
 
 define('NOTIFICATION_ALL',      0); // to all users
