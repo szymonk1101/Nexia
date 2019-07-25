@@ -42,7 +42,8 @@ class Admin extends MY_Controller {
 
             if($login->status == 1) {
                 echo 'Zalogowano pomyślnie';
-                if($last_page = $_SESSION['last_page']) {
+                if(isset($_SESSION['last_page'])) {
+					$last_page = $_SESSION['last_page'];
                     unset($_SESSION['last_page']);
                     redirect($last_page);
                 }
