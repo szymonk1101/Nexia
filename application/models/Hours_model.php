@@ -15,10 +15,10 @@ class Hours_model extends CI_Model  {
     
     public function minimumHours($hours, $hours_2)
     {
-        if($hours->time_from < $hours_2->time_from)
+        if(($hours_2->time_from && $hours->time_from < $hours_2->time_from) || !$hours->time_from)
             $hours->time_from = $hours_2->time_from;
 
-        if($hours->time_to > $hours_2->time_to)
+        if(($hours_2->time_to && $hours->time_to > $hours_2->time_to) || !$hours->time_to)
             $hours->time_to = $hours_2->time_to;
         
         return $hours;
@@ -26,10 +26,10 @@ class Hours_model extends CI_Model  {
 
     public function maximumHours($hours, $hours_2)
     {
-        if($hours->time_from > $hours_2->time_from)
+        if(($hours_2->time_from && $hours->time_from > $hours_2->time_from) || !$hours->time_from)
             $hours->time_from = $hours_2->time_from;
 
-        if($hours->time_to < $hours_2->time_to)
+        if(($hours_2->time_from && $hours->time_to < $hours_2->time_to) || !$hours->time_to)
             $hours->time_to = $hours_2->time_to;
         
         return $hours;

@@ -10,7 +10,7 @@ class Open_hours_model extends CI_Model  {
         $this->load->model('hours_model');
     }
 
-    // DO PRZETESTOWANIA
+    // POWINNO DZIAŁAĆ
     public function getOpenHoursByDate($date, $company_ref, $staff_ref = false, $service_ref = false)
     {
         $result = new stdClass();
@@ -33,28 +33,131 @@ class Open_hours_model extends CI_Model  {
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
-            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
-            if($staff_ref) {
-                $staff_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE staff_ref = '$staff_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
-                if(!empty($staff_open_hours))
-                    $open_hours = $this->hours_model->minimumHours($open_hours, $staff_open_hours);
-            }
-
-            if($service_ref) {
-                $service_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE service_ref = '$service_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
-                if(!empty($service_open_hours))
-                    $open_hours = $this->hours_model->minimumHours($open_hours, $service_open_hours);
-            }
-
+            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
             if(!empty($open_hours)) {
                 $result->time_from = $open_hours->{$dayname.'_from'};
                 $result->time_to = $open_hours->{$dayname.'_to'};
+            }
+
+            if($staff_ref) {
+                $staff_open_hours = $this->db->query("SELECT id, ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE staff_ref = '$staff_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+                if(!empty($staff_open_hours)) {
+                    $hours2 = new stdClass();
+                    $hours2->time_from = $staff_open_hours->{$dayname."_from"};
+                    $hours2->time_to = $staff_open_hours->{$dayname."_to"};
+                    $result = $this->hours_model->minimumHours($result, $hours2);
+                }
+            }
+
+            if($service_ref) {
+                $service_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE service_ref = '$service_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+                if(!empty($service_open_hours)) {
+                    $hours2 = new stdClass();
+                    $hours2->time_from = $service_open_hours->{$dayname."_from"};
+                    $hours2->time_to = $service_open_hours->{$dayname."_to"};
+                    $result = $this->hours_model->minimumHours($result, $hours2);
+                }
             }
         }
 
         return $result;
     }
-    
+
+    public function getStaffOpenHoursByDate($date, $company_ref, $service_ref = false)
+    {
+        
+    }
+
+    /**
+     * Parameters:
+     * - date [YYYY-MM-DD]
+     * - company_ref
+     * - (staff_ref)
+     * - (service_ref)
+     */
+    public function getFreeHoursForDate($date, $company_ref, $staff_ref = false, $service_ref = false)
+    {
+        $this->load->model('staff_model');
+        $this->load->model('reservations_model');
+
+        $company_oh = $this->getOpenHoursByDate($date, $company_ref);
+        $service_oh = new stdClass();
+        $service_oh->time_from = false;
+        $service_oh->time_to = false;
+        if($service_ref) {
+            $service_oh = $this->getOpenHoursByDate($date, $company_ref, false, $staff_ref);
+        }
+
+        $free_blocks = array();
+
+        // jeśli staff nie został wybrany to bierzemy wszystkich
+        if(!$staff_ref) {
+            $staff = $this->staff_model->getCompanyStaff($company_ref);
+            $staff_oh = array();
+            foreach($staff as $s)
+            {
+                $s_oh = $this->getOpenHoursByDate($date, $company_ref, $s->id);
+                if($s_oh->time_from == false) {
+                    $s_oh->time_from = $company_oh->time_from;
+                }
+                if($s_oh->time_to == false) {
+                    $s_oh->time_to = $company_oh->time_to;
+                }
+                $s_oh = $this->hours_model->minimumHours($s_oh, $service_oh);
+                $s_oh->id = $s->id;
+                array_push($staff_oh, $s_oh);
+            }
+
+            $staff_free_blocks = array();
+            foreach($staff_oh as $s_oh) {
+                $f_b = array();
+                array_push($f_b, [$s_oh->time_from, $s_oh->time_to]);
+
+                $reservations = $this->reservations_model->getStaffReservationsByDate($date, $s_oh->id);
+                array_push($staff_free_blocks, $this->hours_model->excludeHoursArrays($f_b, $reservations));
+            }
+
+            //merge $staff_free_blocks do jednego
+            print_r($staff_free_blocks);
+
+        }
+        else
+        {
+            $staff_oh = $this->getOpenHoursByDate($date, $company_ref, $staff_ref);
+            if($staff_oh->time_from == false) {
+                $staff_oh->time_from = $company_oh->time_from;
+            }
+            if($staff_oh->time_to == false) {
+                $staff_oh->time_to = $company_oh->time_to;
+            }
+            $staff_oh = $this->hours_model->minimumHours($staff_oh, $service_oh);
+
+            $reservations = $this->reservations_model->getStaffReservationsByDate($date, $staff_ref);
+
+            array_push($free_blocks, [$staff_oh->time_from, $staff_oh->time_to]);
+
+            $free_blocks = $this->hours_model->excludeHoursArrays($free_blocks, $reservations);
+        }
+
+        return $free_blocks;
+    }
+
+    /**
+     * Parameters:
+     * - date       [YYYY-MM-DD]
+     * - time_from  [HH:MM:SS]
+     * - time_to    [HH:MM:SS]
+     */
+    public function isTermFree($company_ref, $date, $time_from, $time_to)
+    {
+        $free_blocks = $this->getFreeHoursForDate($company_ref, $date);
+        foreach($free_blocks as $block)
+            if($block[0] <= $time_from && $block[1] >= $time_to)
+                return true;
+
+        return false;
+    }
+
     /**
      * Parameters:
      * - from [YYYY-MM-DD]
@@ -101,7 +204,7 @@ class Open_hours_model extends CI_Model  {
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
-            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
+            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
             if(!empty($open_hours)) {
                 $result->time_from = $open_hours->{$dayname.'_from'};
                 $result->time_to = $open_hours->{$dayname.'_to'};
@@ -109,75 +212,6 @@ class Open_hours_model extends CI_Model  {
         }
         
         return $result;
-    }
-
-    /**
-     * Parameters:
-     * - date [YYYY-MM-DD]
-     */
-    public function getFreeHoursForDate($company_ref, $date)
-    {
-        $this->load->model('reservations_model');
-
-        $free_blocks = array();
-        $exception = $this->db->query("SELECT * FROM open_hours_exceptions WHERE company_ref = '$company_ref' AND `date` = '$date'")->row();
-        if(!empty($exception)) {
-            array_push($free_blocks, [$exception->time_from, $exception->time_to]);
-        }
-        else {
-            $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
-            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND valid_to is null OR valid_to > '$date'")->row();
-            if(!empty($open_hours))
-                array_push($free_blocks, [$open_hours->{$dayname.'_from'}, $open_hours->{$dayname.'_to'}]);
-        }
-
-        $reservations = $this->reservations_model->getReservationsByDate($company_ref, $date);
-        
-        if(empty($free_blocks))
-            return $free_blocks;
-
-        $g_from = $free_blocks[0][0];
-        $g_to = $free_blocks[0][1];
-
-        foreach($reservations as $r)
-        {
-            foreach($free_blocks as $k => $block)
-            {
-                if($block[0] <= $r->time_from && $block[1] >= $r->time_to)
-                {
-                    if($block[0] == $r->time_from)
-                        $free_blocks[$k][0] = $r->time_to;
-                    else if($block[1] == $r->time_to)
-                        $free_blocks[$k][1] = $r->time_from;
-                    else {
-                        $end = $block[1];
-                        $free_blocks[$k][1] = $r->time_from;
-                        array_push($free_blocks, [$r->time_to, $end]);
-                    }
-
-                    if($free_blocks[$k][0] == $free_blocks[$k][1])
-                        unset($free_blocks[$k]);
-                }
-            }
-        }
-
-        return $free_blocks;
-    }
-
-    /**
-     * Parameters:
-     * - date       [YYYY-MM-DD]
-     * - time_from  [HH:MM:SS]
-     * - time_to    [HH:MM:SS]
-     */
-    public function isTermFree($company_ref, $date, $time_from, $time_to)
-    {
-        $free_blocks = $this->getFreeHoursForDate($company_ref, $date);
-        foreach($free_blocks as $block)
-            if($block[0] <= $time_from && $block[1] >= $time_to)
-                return true;
-
-        return false;
     }
 
 

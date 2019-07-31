@@ -25,6 +25,12 @@ function initNotifications(options)
                         t = toastr.warning(notify.content, (notify.title?notify.title:false));
 
                     $(t).data('n-uid', notify.id);
+
+                    Push.create(notify.title?notify.title:notify.content, {
+                        body: notify.title?notify.content:'',
+                        //link: '#',
+                        //icon: '',
+                    });
                 }
 
             });
