@@ -27,7 +27,10 @@ class Admin extends MY_Controller {
 
         var_dump($this->open_hours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00')); */
 
-        $this->load->view('admin/index');
+        $data = array();
+        $data['free'] = $this->open_hours_model->getFreeHoursForDate('2019-07-04', 1, 1, false);
+
+        $this->load->view('admin/index', $data);
     }
     
     public function login()

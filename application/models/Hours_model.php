@@ -13,23 +13,35 @@ class Hours_model extends CI_Model  {
      * EVERY TIMES VARIABLES MUST BE IN FORMAT: HH:MM. FOR EXAMPLE 01:01
      */
     
+    /**
+     * Wybiera minimalny zakres time_from - time_to z dwóch zakresów. Jeżeli który zakres false, zwraca pusty zakres false-false.
+     */
     public function minimumHours($hours, $hours_2)
     {
-        if(($hours_2->time_from && $hours->time_from < $hours_2->time_from) || !$hours->time_from)
+        if(!$hours->time_from || !$hours->time_to || !$hours_2->time_from || !$hours_2->time_to) {
+            $hours->time_from = false;
+            $hours->time_to = false;
+            return $hours;
+        }
+
+        if($hours->time_from < $hours_2->time_from)
             $hours->time_from = $hours_2->time_from;
 
-        if(($hours_2->time_to && $hours->time_to > $hours_2->time_to) || !$hours->time_to)
+        if($hours->time_to > $hours_2->time_to)
             $hours->time_to = $hours_2->time_to;
         
         return $hours;
     }
 
+    /**
+     * Wybiera maksymalny zakres time_from - time_to z dwóch zakresów. False zastępuje nie pustym.
+     */
     public function maximumHours($hours, $hours_2)
     {
-        if(($hours_2->time_from && $hours->time_from > $hours_2->time_from) || !$hours->time_from)
+        if(($hours->time_from && $hours_2->time_from && $hours->time_from > $hours_2->time_from) || !$hours->time_from)
             $hours->time_from = $hours_2->time_from;
 
-        if(($hours_2->time_from && $hours->time_to < $hours_2->time_to) || !$hours->time_to)
+        if(($hours->time_to && $hours_2->time_from && $hours->time_to < $hours_2->time_to) || !$hours->time_to)
             $hours->time_to = $hours_2->time_to;
         
         return $hours;

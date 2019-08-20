@@ -68,6 +68,16 @@
                         </div>
                     </div>
                     <div class="">
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <?php print_r($free); ?>
+
+                            </div>
+                        </div>
+
                         <div class="row">
 
                             <div class="col-md-6">

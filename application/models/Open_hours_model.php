@@ -28,8 +28,11 @@ class Open_hours_model extends CI_Model  {
         }
 
         if(!empty($exceptions)) {
-            $result->time_from = $exceptions->time_from;
-            $result->time_to = $exceptions->time_to;
+            if($exceptions->fullday == 0) {
+                $result->time_from = $exceptions->time_from;
+                $result->time_to = $exceptions->time_to;
+            }
+            // jeśli fullday to dalej time_from i time_to = false
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
@@ -72,21 +75,16 @@ class Open_hours_model extends CI_Model  {
      * Parameters:
      * - date [YYYY-MM-DD]
      * - company_ref
+     * - service_ref
      * - (staff_ref)
-     * - (service_ref)
      */
-    public function getFreeHoursForDate($date, $company_ref, $staff_ref = false, $service_ref = false)
+    public function getFreeHoursForDate($date, $company_ref, $service_ref, $staff_ref = false)
     {
         $this->load->model('staff_model');
         $this->load->model('reservations_model');
 
-        $company_oh = $this->getOpenHoursByDate($date, $company_ref);
-        $service_oh = new stdClass();
-        $service_oh->time_from = false;
-        $service_oh->time_to = false;
-        if($service_ref) {
-            $service_oh = $this->getOpenHoursByDate($date, $company_ref, false, $staff_ref);
-        }
+        //$company_oh = $this->getOpenHoursByDate($date, $company_ref);
+        $service_oh = $this->getOpenHoursByDate($date, $company_ref, false, $service_ref);
 
         $free_blocks = array();
 
@@ -96,16 +94,11 @@ class Open_hours_model extends CI_Model  {
             $staff_oh = array();
             foreach($staff as $s)
             {
-                $s_oh = $this->getOpenHoursByDate($date, $company_ref, $s->id);
-                if($s_oh->time_from == false) {
-                    $s_oh->time_from = $company_oh->time_from;
+                $s_oh = $this->getOpenHoursByDate($date, $company_ref, $s->id, $service_ref);
+                if($s_oh->time_from != false && $s_oh->time_to != false) {
+                    $s_oh->id = $s->id;
+                    array_push($staff_oh, $s_oh);
                 }
-                if($s_oh->time_to == false) {
-                    $s_oh->time_to = $company_oh->time_to;
-                }
-                $s_oh = $this->hours_model->minimumHours($s_oh, $service_oh);
-                $s_oh->id = $s->id;
-                array_push($staff_oh, $s_oh);
             }
 
             $staff_free_blocks = array();
@@ -118,7 +111,7 @@ class Open_hours_model extends CI_Model  {
             }
 
             //merge $staff_free_blocks do jednego
-            print_r($staff_free_blocks);
+            return $staff_free_blocks;
 
         }
         else
@@ -199,8 +192,10 @@ class Open_hours_model extends CI_Model  {
 
         $exceptions = $this->db->query("SELECT * FROM open_hours_exceptions WHERE company_ref = '$company_ref' AND `date` = '$date'")->row();
         if(!empty($exceptions)) {
-            $result->time_from = $exceptions->time_from;
-            $result->time_to = $exceptions->time_to;
+            if($exceptions->fullday == 0) {
+                $result->time_from = $exceptions->time_from;
+                $result->time_to = $exceptions->time_to;
+            }
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
