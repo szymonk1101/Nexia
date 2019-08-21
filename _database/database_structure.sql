@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 18 Lip 2019, 20:02
+-- Czas generowania: 21 Sie 2019, 19:07
 -- Wersja serwera: 10.1.28-MariaDB
 -- Wersja PHP: 7.1.11
 
@@ -94,8 +94,9 @@ CREATE TABLE `open_hours` (
 CREATE TABLE `open_hours_exceptions` (
   `id` int(11) NOT NULL,
   `date` date NOT NULL,
-  `time_from` time NOT NULL,
-  `time_to` time NOT NULL,
+  `fullday` tinyint(4) NOT NULL DEFAULT '0',
+  `time_from` time DEFAULT NULL,
+  `time_to` time DEFAULT NULL,
   `disposable` tinyint(4) NOT NULL DEFAULT '1',
   `company_ref` int(11) DEFAULT NULL,
   `staff_ref` int(11) DEFAULT NULL,
@@ -139,6 +140,19 @@ CREATE TABLE `services` (
   `price` decimal(10,2) NOT NULL,
   `unit` int(11) NOT NULL,
   `duration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `staff`
+--
+
+CREATE TABLE `staff` (
+  `id` int(11) NOT NULL,
+  `user_ref` int(11) NOT NULL,
+  `company_ref` int(11) NOT NULL,
+  `level` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -210,6 +224,12 @@ ALTER TABLE `services`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -235,13 +255,13 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT dla tabeli `open_hours`
 --
 ALTER TABLE `open_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT dla tabeli `open_hours_exceptions`
 --
 ALTER TABLE `open_hours_exceptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT dla tabeli `reservations`
@@ -253,13 +273,19 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT dla tabeli `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT dla tabeli `staff`
+--
+ALTER TABLE `staff`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
