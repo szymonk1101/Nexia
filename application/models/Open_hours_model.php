@@ -107,23 +107,20 @@ class Open_hours_model extends CI_Model  {
                 array_push($f_b, [$s_oh->time_from, $s_oh->time_to]);
 
                 $reservations = $this->reservations_model->getStaffReservationsByDate($date, $s_oh->id);
-                array_push($staff_free_blocks, $this->hours_model->excludeHoursArrays($f_b, $reservations));
+                $f_b = $this->hours_model->excludeHoursArrays($f_b, $reservations);
+
+                $staff_free_blocks = $this->hours_model->mergeHours($staff_free_blocks, $f_b);
             }
 
-            //merge $staff_free_blocks do jednego
             return $staff_free_blocks;
 
         }
         else
         {
-            $staff_oh = $this->getOpenHoursByDate($date, $company_ref, $staff_ref);
-            if($staff_oh->time_from == false) {
-                $staff_oh->time_from = $company_oh->time_from;
+            $staff_oh = $this->getOpenHoursByDate($date, $company_ref, $staff_ref, $service_ref);
+            if($staff_oh->time_from == false || $staff_oh->time_to == false) {
+                return array();
             }
-            if($staff_oh->time_to == false) {
-                $staff_oh->time_to = $company_oh->time_to;
-            }
-            $staff_oh = $this->hours_model->minimumHours($staff_oh, $service_oh);
 
             $reservations = $this->reservations_model->getStaffReservationsByDate($date, $staff_ref);
 

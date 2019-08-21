@@ -75,6 +75,10 @@
 
                                 <?php print_r($free); ?>
 
+                                <?php
+
+                                ?>
+
                             </div>
                         </div>
 

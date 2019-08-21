@@ -75,36 +75,91 @@ class Hours_model extends CI_Model  {
         return $free;
     }
 
-    // DO PRZETESTOWANIA
+    // DO PRZETESTOWANIA, PRAWDOPODOBNIE DZIAŁA
     public function mergeHours($hours, $to_merge)
     {
         foreach($to_merge as $j => $r)
         {
+            $to_push = true;
             foreach($hours as $k => $block)
             {
-                if($block['time_to'] >= $r['time_from'] && $block['time_to'] < $r['time_from'])
-                {
-                    $hours[$k]['time_to'] = $r['time_to'];
+                $unset = false;
+                if($unset) continue;
+
+                if($block[0] <= $r[0] && $block[1] >= $r[1]) {
+                    unset($to_merge[$j]);
+                    $unset = true;
+                    $to_push = false;
                 }
-                else if($block['time_from'] <= $r['time_to'] && $block['time_from'] > $r['time_from'])
-                {
-                    $hours[$k]['time_from'] = $r['time_from'];
+                else if($r[0] >= $block[0] && $r[0] <= $block[1] && $r[1] > $block[1]) {
+                    $hours[$k][1] = $r[1];
+                    $to_push = false;
                 }
-                else if($block['time_to'] < $r['time_from'] || $block['time_from'] > $r['time_to'])
-                {
-                    if(!in_array($r, $hours)) {
-                        array_push($hours, $r);
-                    }
+                else if($r[1] >= $block[0] && $r[1] <= $block[1] && $r[0] < $block[0]) {
+                    $hours[$k][0] = $r[0];
+                    $to_push = false;
+                }
+                else if($r[0] <= $block[0] && $r[1] >= $block[1]) {
+                    $hours[$k][1] = $r[1];
+                    $hours[$k][0] = $r[0];
+                    $to_push = false;
                 }
 
-                print_r($hours);
-                echo '<br />';
+            }
+
+            if($to_push && !in_array($r, $hours)) {
+                array_push($hours, $r);
+            }
+
+            unset($to_merge[$j]);
+        }
+
+        $hours = array_merge($hours);
+        $return = $hours;
+        // merge hours
+        for($j=0; $j < count($hours); $j++)
+        {
+            $r = $hours[$j];
+            for($k=$j+1; $k < count($hours); $k++)
+            {
+                $unset = false;
+                if(!isset($hours[$k]) || $unset || $j == $k) continue;
+
+                $block = $hours[$k];
+
+                if($block[0] <= $r[0] && $block[1] >= $r[1]) {
+                    unset($return[$j]);
+                    $unset = true;
+                }
+                else if($r[0] >= $block[0] && $r[0] <= $block[1] && $r[1] > $block[1]) {
+                    $return[$j][0] = $block[0];
+                    unset($return[$k]);
+                }
+                else if($r[1] >= $block[0] && $r[1] <= $block[1] && $r[0] < $block[0]) {
+                    $return[$j][1] = $block[1];
+                    unset($return[$k]);
+                }
+                else if($r[0] <= $block[0] && $r[1] >= $block[1]) {
+                    unset($return[$k]);
+                }
             }
         }
 
-        return $hours;
+        uasort($return, 'mul_sort');
+        return array_merge($return);
     }
 
+}
 
+// do sortowania tablicy po wartości tablicy wewnętrznej
+function mul_sort($a,$b)
+{
+    if($a[0] > $b[0])
+        return 1; 
 
+    if($a[0] < $b[0])
+        return -1;
+
+    if($a[0] == $b[0])
+        return 0;
 }
