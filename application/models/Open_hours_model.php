@@ -206,6 +206,20 @@ class Open_hours_model extends CI_Model  {
         return $result;
     }
 
+    public function getOpenHoursDataTable($company_ref, $start, $length, $search, $order, $columns)
+    {
+        $return = new stdClass();
+        $this->db->where('company_ref', $company_ref);
+
+        $return->recordsTotal = $this->db->count_all_results('open_hours');
+
+
+        $return->recordsFiltered =  $return->recordsTotal;
+        $return->data = $this->db->get('open_hours')->result();
+
+        return $return;
+    }
+
 
     protected function getColumnDayNameByInteger($day)
     {

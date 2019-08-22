@@ -809,7 +809,7 @@
                     </span>
                 </div>    <div class="scrollbar-sidebar">
                     <div class="app-sidebar__inner">
-                        <ul class="vertical-nav-menu">
+                        <ul id="MainMenu" class="vertical-nav-menu">
                             <li class="app-sidebar__heading">Menu</li>
 
                             <li>
@@ -817,6 +817,51 @@
                                     <i class="metismenu-icon pe-7s-home"></i> Kokpit
                                 </a>
                             </li>
+
+                            <li>
+                                <a href="<?= base_url('admin/services'); ?>">
+                                    <i class="metismenu-icon pe-7s-ticket"></i> Usługi
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-users"></i> Pracownicy
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="<?= base_url('admin/staff'); ?>">
+                                            <i class="metismenu-icon"></i> Lista pracowników
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/staff/add'); ?>">
+                                            <i class="metismenu-icon"></i> Dodaj pracownika
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-clock"></i> Godziny
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="<?= base_url('admin/hours'); ?>">
+                                            <i class="metismenu-icon"></i> Godziny dostępności
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="metismenu-icon"></i> Ustawienia
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
 
                             <li>
                                 <a href="#">
@@ -1479,3 +1524,6 @@
                     </div>
                 </div>
             </div>
+
+            <div class="app-main__outer">
+            
