@@ -15,7 +15,7 @@ class Admin extends MY_Controller {
 
         $this->load->model('open_hours_model');
 
-        print_r($this->open_hours_model->getCompanyOpenHours($this->input->get('company')));
+        /* print_r($this->open_hours_model->getCompanyOpenHours($this->input->get('company')));
 
         print_r($this->open_hours_model->getCompanyOpenHoursByDate($this->input->get('company'), '2019-07-03'));
 
@@ -25,13 +25,22 @@ class Admin extends MY_Controller {
 
         echo '<br /><br />';
 
-        var_dump($this->open_hours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00'));
+        var_dump($this->open_hours_model->isTermFree($this->input->get('company'), '2019-07-04', '12:00:00', '13:00:00')); */
 
-        $this->load->view('admin/index');
+        $data = array();
+        $data['free'] = $this->open_hours_model->getFreeHoursForDate('2019-07-04', 1, 1, false);
+
+        $hours_1 = array(['08:00:00', '09:00:00'], ['09:30:00', '12:00:00'], ['14:00:00', '14:30:00'], ['18:00:00', '21:00:00']);
+        $hours_2 = array(['08:00:00', '10:00:00'], ['11:00:00', '13:00:00'], ['19:00:00', '20:00:00']);
+
+        //$data['free'] = $this->hours_model->mergeHours($hours_1, $hours_2);
+
+        $this->load->view('admin/index', $data);
     }
     
     public function login()
     {
+        $view_data = array();
         $this->load->library('form_validation');
 
 
@@ -41,23 +50,28 @@ class Admin extends MY_Controller {
             $login = $this->auth_model->login($this->input->post('identity'), $this->input->post('password'), FALSE);
 
             if($login->status == 1) {
-                echo 'Zalogowano pomyślnie';
+                $this->session->set_flashdata('alert-success', lang('LoginSuccessful'));
                 if(isset($_SESSION['last_page'])) {
-					$last_page = $_SESSION['last_page'];
+                    $last_page = $_SESSION['last_page'];
                     unset($_SESSION['last_page']);
                     redirect($last_page);
+                } else {
+                    redirect('admin');
                 }
             } else {
-                echo $login->message;
+                $view_data['alert_danger'] = $login->message;
             }
         }
 
-        $this->load->view('admin/login');
+        $this->load->view('admin/login', $view_data);
     }
 
     public function logout()
     {
-        $this->auth_model->logout();
+        if($this->auth_model->logout()) {
+            $this->session->set_flashdata('alert-success', lang('LogoutSuccessful'));
+            redirect('admin/login');
+        }
     }
 
     public function test()

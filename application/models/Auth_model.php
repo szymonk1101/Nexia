@@ -43,7 +43,7 @@ class Auth_model extends CI_Model  {
             return $result;
         }
 
-        $user = $this->db->select($this->identity_column . ', id, password, active, lastlogin')
+        $user = $this->db->select($this->identity_column . ', id, password, active, lastlogin, login_attempts')
             ->where($this->identity_column, $identity, TRUE)
             ->get('users', 1)->row();
 
@@ -108,7 +108,7 @@ class Auth_model extends CI_Model  {
             //wrong password
             if(!empty($user)) {
     
-                self::$db->where('id', $user->id, TRUE)
+                $this->db->where('id', $user->id, TRUE)
                 ->update('users', array(
                     'token' => uniqid(),
                     'token_expdate' => $now,
