@@ -6,6 +6,7 @@ class Notifications extends MY_Controller {
     public function __construct()
 	{
         parent::__construct();
+		$this->load->library('ApiResult');
         $this->load->model('notifications_model');
     }
     
