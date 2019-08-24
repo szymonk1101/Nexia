@@ -17,6 +17,12 @@ class Admin_hours extends MY_Controller {
 
         $this->load->view('admin/hours/index');
     }
+
+    public function add()
+    {
+        
+        $this->load->view('admin/hours/add');
+    }
     
     public function getOpenHoursDataTable()
     {

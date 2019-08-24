@@ -12,19 +12,28 @@ $(document).ready(() => {
                 data: 'id',
             },
             {
+                data: null,
+            },
+            {
+                data: null,
+                render: (data,type,row) => {
+                    return ((row.company_ref) ? '<div class="mr-2 badge badge-primary">Firma</div>':'')
+                        +((row.staff_ref) ? '<div class="mr-2 badge badge-secondary">Pracownik</div>':'')
+                        +((row.service_ref) ? '<div class="mr-2 badge badge-info">Usługa</div>':'');
+                }
+            },
+            {
                 data: 'valid_from',
             },
             {
                 data: 'valid_to',
             },
             {
-                data: 'company_ref',
-            },
-            {
-                data: 'staff_ref',
-            },
-            {
-                data: 'service_ref',
+                data: null,
+                render: (data,type,row) => {
+                    return '<a href="#" class="btn-icon btn-icon-only btn-pill btn btn-sm btn-outline-primary"><i class="pe-7s-tools btn-icon-wrapper"></i></a>';
+                },
+                className: 'text-center'
             }
         ]
     });

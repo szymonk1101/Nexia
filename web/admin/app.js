@@ -19,7 +19,20 @@ $(document).ready(() => {
 
     setTimeout(function () {
         $(".vertical-nav-menu").metisMenu();
+        const ps = new PerfectScrollbar('.scrollbar-sidebar', {
+            wheelSpeed: 2,
+            wheelPropagation: !1,
+            minScrollbarLength: 20
+        });
     }, 100);
+
+    /*$('.scrollbar-container').each(() => {
+        const ps = new PerfectScrollbar($(e), {
+            wheelSpeed: 2,
+            wheelPropagation: !1,
+            minScrollbarLength: 20
+        });
+    })*/
 
     // Search wrapper trigger
 
