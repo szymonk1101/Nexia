@@ -862,6 +862,12 @@
                                 </ul>
                             </li>
 
+                            <li>
+                                <a href="<?= base_url('admin/settings'); ?>">
+                                    <i class="metismenu-icon pe-7s-settings"></i> Ustawienia
+                                </a>
+                            </li>
+
 
                             <li>
                                 <a href="#">

@@ -9,8 +9,8 @@
                                     <i class="pe-7s-home icon-gradient bg-mean-fruit"></i>
                                 </div>
                                 <div>
-                                    Godziny dostępności
-                                    <div class="page-title-subheading">Tutaj możesz zarządzać dostępnością firmy, poszczególnych usług oraz pracowników.</div>
+                                    Ustawienia
+                                    <div class="page-title-subheading">Lorem ipsum.</div>
                                 </div>
                             </div>
                             <div class="page-title-actions">
@@ -67,66 +67,42 @@
                         </div>
                     </div>
                     <div class="">
+                        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link active" id="tab-main" data-toggle="tab" href="#tab-content-main">
+                                    <span>Ogólne</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-staff" data-toggle="tab" href="#tab-content-staff">
+                                    <span>Pracownicy</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a role="tab" class="nav-link" id="tab-hours" data-toggle="tab" href="#tab-content-hours">
+                                    <span>Godziny</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
 
-
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <?php
-
-                                ?>
-
+                            <div class="tab-pane tabs-animation fade show active" id="tab-content-main" role="tabpanel">
+                                Ogólne
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="main-card mb-3 card">   
-                                    <div class="card-body">
-                                        <h5 class="card-title"></h5>
-                                        <table style="width:100%" id="openhours_datatable" class="table table-hover table-striped table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-staff" role="tabpanel">
+                                Pracowcniy
                             </div>
-                            
-                        </div>
+                            <div class="tab-pane tabs-animation fade" id="tab-content-hours" role="tabpanel">
+                                Godziny
+                            </div>
 
+                        </div>
                     </div>
                 </div>
 
-<script type="text/javascript">
-
-var openhours_datatable_ajax_url = '<?= base_url('admin/hours/getOpenHoursDataTable'); ?>';
-
-</script>
-
-<?php
-JavascriptManager::add(array(
+<?php JavascriptManager::add(array(
     
     'web/admin/scripts/views/hours_index.js'
-)); 
-?>
+)); ?>
 
 <?php $this->load->view('admin/partials/footer'); ?>
