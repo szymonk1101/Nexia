@@ -13,58 +13,6 @@
                                     <div class="page-title-subheading">Tutaj możesz zarządzać dostępnością firmy, poszczególnych usług oraz pracowników.</div>
                                 </div>
                             </div>
-                            <div class="page-title-actions">
-                                <a href="<?= base_url('admin/hours/add'); ?>">
-                                <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom" class="btn-shadow mr-3 btn btn-success">
-                                    <i class="fa fa-plus"></i>
-                                </button></a>
-                                <div class="d-inline-block dropdown">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
-                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                            <i class="fa fa-business-time fa-w-20"></i>
-                                        </span>
-                                        Buttons
-                                    </button>
-                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item">
-                                                <a class="nav-link">
-                                                    <i class="nav-link-icon lnr-inbox"></i>
-                                                    <span>
-                                                        Inbox
-                                                    </span>
-                                                    <div class="ml-auto badge badge-pill badge-secondary">86</div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link">
-                                                    <i class="nav-link-icon lnr-book"></i>
-                                                    <span>
-                                                        Book
-                                                    </span>
-                                                    <div class="ml-auto badge badge-pill badge-danger">5</div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link">
-                                                    <i class="nav-link-icon lnr-picture"></i>
-                                                    <span>
-                                                        Picture
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a disabled class="nav-link disabled">
-                                                    <i class="nav-link-icon lnr-file-empty"></i>
-                                                    <span>
-                                                        File Disabled
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="">
@@ -74,42 +22,130 @@
                                 <div class="main-card mb-3 card">   
                                     <div class="card-body">
                                         <h5 class="card-title">Dodaj nowe godziny</h5>
-                                        <form class="">
-                                            <div class="position-relative row form-group"><label for="exampleEmail" class="col-sm-2 col-form-label">Email</label>
-                                                <div class="col-sm-10"><input name="email" id="exampleEmail" placeholder="with a placeholder" type="email" class="form-control"></div>
+
+                                        <?php $this->load->view('admin/partials/alerts'); ?>
+
+                                        <form class="" method="POST" action="<?= base_url('admin/hours/add'); ?>">
+                                            <div class="position-relative row form-group"><label for="name" class="col-sm-2 col-form-label">Nazwa</label>
+                                                <div class="col-sm-10"><input name="name" id="name" placeholder="" type="text" class="form-control"></div>
                                             </div>
-                                            <div class="position-relative row form-group"><label for="examplePassword" class="col-sm-2 col-form-label">Password</label>
-                                                <div class="col-sm-10"><input name="password" id="examplePassword" placeholder="password placeholder" type="password" class="form-control"></div>
-                                            </div>
-                                            <div class="position-relative row form-group"><label for="exampleSelect" class="col-sm-2 col-form-label">Select</label>
-                                                <div class="col-sm-10"><select name="select" id="exampleSelect" class="form-control"></select></div>
-                                            </div>
-                                            <div class="position-relative row form-group"><label for="exampleSelectMulti" class="col-sm-2 col-form-label">Select Multiple</label>
-                                                <div class="col-sm-10"><select multiple="" name="selectMulti" id="exampleSelectMulti" class="form-control"></select></div>
-                                            </div>
-                                            <div class="position-relative row form-group"><label for="exampleText" class="col-sm-2 col-form-label">Text Area</label>
-                                                <div class="col-sm-10"><textarea name="text" id="exampleText" class="form-control"></textarea></div>
-                                            </div>
-                                            <div class="position-relative row form-group"><label for="exampleFile" class="col-sm-2 col-form-label">File</label>
-                                                <div class="col-sm-10"><input name="file" id="exampleFile" type="file" class="form-control-file">
-                                                    <small class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
-                                                </div>
-                                            </div>
-                                            <fieldset class="position-relative row form-group">
-                                                <legend class="col-form-label col-sm-2">Radio Buttons</legend>
+                                            <div class="position-relative row form-group"><label for="valid_from" class="col-sm-2 col-form-label">Ważne od</label>
                                                 <div class="col-sm-10">
-                                                    <div class="position-relative form-check"><label class="form-check-label"><input name="radio2" type="radio" class="form-check-input"> Option one is this and that—be sure to include why it's great</label></div>
-                                                    <div class="position-relative form-check"><label class="form-check-label"><input name="radio2" type="radio" class="form-check-input"> Option two can be something else and selecting it will deselect option
-                                                        one</label></div>
-                                                    <div class="position-relative form-check disabled"><label class="form-check-label"><input name="radio2" disabled="" type="radio" class="form-check-input"> Option three is disabled</label></div>
-                                                </div>
-                                            </fieldset>
-                                            <div class="position-relative row form-group"><label for="checkbox2" class="col-sm-2 col-form-label">Checkbox</label>
-                                                <div class="col-sm-10">
-                                                    <div class="position-relative form-check"><label class="form-check-label"><input id="checkbox2" type="checkbox" class="form-check-input"> Check me out</label></div>
+                                                    <input name="valid_from" id="valid_from" placeholder="" type="text" class="form-control input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd hh:mm:ss" im-insert="false">
                                                 </div>
                                             </div>
-                                            <div class="position-relative row form-check">
+                                            <div class="position-relative row form-group"><label for="valid_to" class="col-sm-2 col-form-label">Ważne do</label>
+                                                <div class="col-sm-10"><input name="valid_to" id="valid_to" placeholder="" type="text" class="form-control input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd hh:mm:ss" im-insert="false"></div>
+                                            </div>
+                                            <div class="position-relative row form-group"><label for="staff_ref" class="col-sm-2 col-form-label">Przypisane do pracownika</label>
+                                                <div class="col-sm-10">
+                                                    <select multiple="" name="staff_ref[]" id="staff_ref" class="form-control">
+                                                    <?php foreach($staff as $s): ?>
+                                                        <option value="<?= $s->id; ?>"><?= $s->email; ?></option>
+                                                    <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="position-relative row form-group"><label for="service_ref" class="col-sm-2 col-form-label">Przypisane do usługi</label>
+                                                <div class="col-sm-10">
+                                                    <select multiple="" name="service_ref[]" id="service_ref" class="form-control">
+                                                    <?php foreach($services as $s): ?>
+                                                        <option value="<?= $s->id; ?>"><?= $s->name; ?></option>
+                                                    <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Poniedziałek</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="mon_from" id="mon_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="mon_to" id="mon_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Wtorek</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="tue_from" id="tue_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="tue_to" id="tue_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Środa</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="wed_from" id="wed_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="wed_to" id="wed_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Czwartek</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="thu_from" id="thu_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="thu_to" id="thu_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Piątek</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="fri_from" id="fri_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="fri_to" id="fri_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Sobota</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="sat_from" id="sat_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="sat_from" id="sat_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="position-relative row form-group">
+                                                        <label for="exampleFile" class="col-sm-2 col-form-label">Niedziela</label>
+                                                        <div class="col-sm-5">
+                                                            <input name="sun_from" id="sun_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <input name="sun_to" id="sun_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="position-relative row form-check mt-5">
                                                 <div class="col-sm-12 text-center">
                                                     <button class="btn btn-primary">Dodaj</button>
                                                 </div>
@@ -124,16 +160,11 @@
                     </div>
                 </div>
 
-<script type="text/javascript">
-
-var openhours_datatable_ajax_url = '<?= base_url('admin/hours/getOpenHoursDataTable'); ?>';
-
-</script>
-
 <?php
 JavascriptManager::add(array(
-    
-    'web/admin/scripts/views/hours_index.js'
+    'web/admin/plugins/jquery.inputmask.min.js',
+    'web/admin/plugins/bootstrap-timepicker/bootstrap-timepicker.min.js',
+    'web/admin/scripts/views/hours_add.js'
 )); 
 ?>
 

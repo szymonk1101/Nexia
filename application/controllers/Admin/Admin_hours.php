@@ -20,8 +20,26 @@ class Admin_hours extends MY_Controller {
 
     public function add()
     {
-        
-        $this->load->view('admin/hours/add');
+        $this->load->model('staff_model');
+        $this->load->model('services_model');
+
+        $this->form_validation->set_rules('name', 'Nazwa', 'required');
+
+        if($this->form_validation->run() !== FALSE) {
+
+            print_r($this->input->post());
+
+            exit();
+            
+        } else {
+            if(!empty($this->form_validation->error_string()))
+                $view_data['alert_danger'] = $this->form_validation->error_string(false, '<br/>');
+        }
+
+        $view_data['staff'] = $this->staff_model->getCompanyStaff($this->user->data->companyid);
+        $view_data['services'] = $this->services_model->getCompanyAllServices($this->user->data->companyid);
+
+        $this->load->view('admin/hours/add', $view_data);
     }
     
     public function getOpenHoursDataTable()

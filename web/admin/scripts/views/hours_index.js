@@ -12,7 +12,7 @@ $(document).ready(() => {
                 data: 'id',
             },
             {
-                data: null,
+                data: 'name',
             },
             {
                 data: null,

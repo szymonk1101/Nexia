@@ -309,7 +309,8 @@ class Auth_model extends CI_Model  {
     {
         $token = $this->getToken();
         if($token) {
-            $query = $this->db->select($this->identity_column.', rank, avatar')->where('token', $token, TRUE)->get('users')->row();
+            //$query = $this->db->select($this->identity_column.', rank, avatar')->where('token', $token, TRUE)->get('users')->row();
+            $query = $this->db->query("SELECT ".$this->identity_column.", rank, avatar, company_ref AS companyid FROM users LEFT JOIN staff ON staff.user_ref=users.id WHERE users.token = ".$this->db->escape($token))->row();
             return $query;
         }
         return false;

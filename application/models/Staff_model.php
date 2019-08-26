@@ -11,7 +11,7 @@ class Staff_model extends CI_Model  {
 
     public function getCompanyStaff($company_ref)
     {
-        return $this->db->where('company_ref', $company_ref, TRUE)->get('staff')->result();
+        return $this->db->query("SELECT staff.id, users.email FROM staff INNER JOIN users ON staff.user_ref=users.id WHERE staff.company_ref = ".$this->db->escape($company_ref))->result();
     }
 
 }
