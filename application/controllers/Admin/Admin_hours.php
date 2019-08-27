@@ -13,8 +13,6 @@ class Admin_hours extends MY_Controller {
 
     public function index()
 	{
-        
-
         $this->load->view('admin/hours/index');
     }
 
@@ -42,11 +40,23 @@ class Admin_hours extends MY_Controller {
         $this->load->view('admin/hours/add', $view_data);
     }
     
+    public function exceptions()
+    {
+        $this->load->view('admin/hours/exceptions');   
+    }
+
     public function getOpenHoursDataTable()
     {
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($this->open_hours_model->getOpenHoursDataTable(1, false, false, false, false, false)));
+    }
+
+    public function getExceptionsDataTable()
+    {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($this->open_hours_model->getExceptionsDataTable(1, false, false, false, false, false)));
     }
 
 }
