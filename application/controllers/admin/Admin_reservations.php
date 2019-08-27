@@ -8,7 +8,7 @@ class Admin_reservations extends MY_Controller {
         parent::__construct();
         $this->checkIsLoggedIn('admin/login');
 
-        $this->load->model('open_hours_model');
+        $this->load->model('reservations_model');
     }
 
     public function index()
@@ -22,7 +22,7 @@ class Admin_reservations extends MY_Controller {
     {
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($this->open_hours_model->getOpenHoursDataTable(1, false, false, false, false, false)));
+            ->set_output(json_encode($this->reservations_model->getReservationsDataTable(1, false, false, false, false, false)));
     }
 
 }

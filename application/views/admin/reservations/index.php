@@ -78,10 +78,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Nazwa</th>
-                                                    <th>Typ</th>
-                                                    <th>Ważny od</th>
-                                                    <th>Ważny do</th>
+                                                    <th>Data</th>
+                                                    <th>Godzina</th>
+                                                    <th>Użytkownik</th>
+                                                    <th>Usługa</th>
+                                                    <th>Pracownik</th>
+                                                    <th>Potwierdzona</th>
+                                                    <th>Opłacona</th>
+                                                    <th>Status</th>
                                                     <th>Akcje</th>
                                                 </tr>
                                             </thead>
@@ -89,10 +93,14 @@
                                             <tfoot>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Nazwa</th>
-                                                    <th>Typ</th>
-                                                    <th>Ważny od</th>
-                                                    <th>Ważny do</th>
+                                                    <th>Data</th>
+                                                    <th>Godzina</th>
+                                                    <th>Użytkownik</th>
+                                                    <th>Usługa</th>
+                                                    <th>Pracownik</th>
+                                                    <th>Potwierdzona</th>
+                                                    <th>Opłacona</th>
+                                                    <th>Status</th>
                                                     <th>Akcje</th>
                                                 </tr>
                                             </tfoot>

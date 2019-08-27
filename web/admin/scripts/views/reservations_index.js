@@ -1,10 +1,10 @@
 
 $(document).ready(() => {
     
-    $('#services_datatable').DataTable({
+    $('#reservations_datatable').DataTable({
         responsive: true,
         ajax: {
-            url: services_datatable_ajax_url
+            url: reservations_datatable_ajax_url
         },
         language: { url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Polish.json' },
         columns: [
@@ -12,22 +12,34 @@ $(document).ready(() => {
                 data: 'id',
             },
             {
-                data: 'name',
+                data: 'date',
             },
             {
-                data: 'category_name'
-            },
-            {
-                data: 'price',
-            },
-            {
-                data: 'duration',
-            },
-			{
-                data: 'active',
+                data: 'time_from',
                 render: (data,type,row) => {
-                    return (data==1) ? '<div class="badge badge-success">Aktywna</div>' : '<div class="badge badge-danger">Nieaktywna</div>';
+                    return row.time_from + ' - ' + row.time_to;
                 }
+            },
+            {
+                data: 'user_ref',
+            },
+            {
+                data: 'service_name',
+            },
+            {
+                data: 'staff_email',
+            },
+            {
+                data: 'confirmed',
+                render: (data,type,row) => {
+                    return (data) ? '<div class="badge badge-success">'+LANG.Yes+'</div>' : '<div class="badge badge-danger">'+LANG.No+'</div>';
+                }
+            },
+            {
+                data: 'paid',
+            },
+            {
+                data: 'status',
             },
             {
                 data: null,

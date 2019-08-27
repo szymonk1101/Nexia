@@ -857,6 +857,11 @@
 
     <script type="text/javascript">
 
+        var LANG;
+        $.getJSON("<?= base_url('web/admin/language/polish.json'); ?>", function(data) {
+            LANG = data;
+        });
+
         var USER_ID = <?= get_instance()->getUserId(); ?>;
 
         $(function() {
