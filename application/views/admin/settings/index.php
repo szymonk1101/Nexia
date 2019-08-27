@@ -100,9 +100,4 @@
                     </div>
                 </div>
 
-<?php JavascriptManager::add(array(
-    
-    'web/admin/scripts/views/hours_index.js'
-)); ?>
-
 <?php $this->load->view('admin/partials/footer'); ?>

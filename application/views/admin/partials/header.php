@@ -15,6 +15,7 @@
 
     <link href="<?= base_url('web/admin/plugins/jquery.timepicker/jquery.timepicker.min.css'); ?>" rel="stylesheet" />
     <link href="<?= base_url('web/main.8d288f825d8dffbbe55e.css'); ?>" rel="stylesheet" />
+    <link href="<?= base_url('web/admin/app.css'); ?>" rel="stylesheet" />
 </head>
 <body>
 <div class="app-container app-theme-gray body-tabs-shadow fixed-header fixed-sidebar">
