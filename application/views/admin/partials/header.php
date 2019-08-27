@@ -839,9 +839,22 @@
                             </li>
 
                             <li>
-                                <a href="<?= base_url('admin/services'); ?>">
-                                    <i class="metismenu-icon pe-7s-ticket"></i> Usługi
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-albums"></i> Usługi
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                 </a>
+								<ul>
+                                    <li>
+                                        <a href="<?= base_url('admin/services'); ?>">
+                                            <i class="metismenu-icon"></i> Lista usług
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/services/categories'); ?>">
+                                            <i class="metismenu-icon"></i> Kategorie
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <li>

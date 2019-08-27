@@ -206,13 +206,43 @@ class Open_hours_model extends CI_Model  {
         return $result;
     }
 
-    public function getOpenHoursDataTable($company_ref, $start, $length, $search, $order, $columns)
+    public function getOpenHoursDataTable($company_ref, $start=0, $length=10, $search, $order, $columns)
     {
         $return = new stdClass();
         $this->db->where('company_ref', $company_ref);
 
         $return->recordsTotal = $this->db->count_all_results('open_hours');
 
+		/*if(isset($search['value']) && !empty($search['value'])) {
+			$s = trim($seach['value']);
+			$this->db->or_like(array(
+				'id' => $s,
+				'name' => $s,
+				'valid_from' => $s,
+				'valid_to' => $s
+			));
+		}
+		
+		if(!empty($order)) {
+			foreach($order as $o) {
+				if(isset($columns[$o['column']])) {
+					$this->db->order_by($columns[$o['column']]['data'], $o['dir']);
+				}
+			}
+		}
+		
+		if(!empty($columns))
+		{
+			foreach($columns as $c)
+			{
+				if(isset($c['search']['value']) && $c['search']['value'] != '')
+				{
+					$this->db->where($c['data'], $c['search']['value'], TRUE);
+				}
+			}
+        }
+		
+		$this->db->limit($length, $start);*/
 
         $return->recordsFiltered =  $return->recordsTotal;
         $return->data = $this->db->get('open_hours')->result();

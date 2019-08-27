@@ -13,5 +13,20 @@ class Services_model extends CI_Model  {
     {
         return $this->db->where('company_ref', $company_ref)->get('services')->result();
     }
+	
+	public function getServicesDataTable($company_ref)
+    {
+        $return = new stdClass();
+		$this->db->select('services.*');
+        $this->db->where('company_ref', $company_ref);
+
+        $return->recordsTotal = $this->db->count_all_results('services');
+
+
+        $return->recordsFiltered =  $return->recordsTotal;
+        $return->data = $this->db->get('services')->result();
+
+        return $return;
+    }
 
 }
