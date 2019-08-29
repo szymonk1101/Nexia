@@ -40,7 +40,7 @@ class Reservations_model extends CI_Model  {
         $this->db->join('staff', 'reservations.staff_ref=staff.id', 'left');
         $this->db->join('users AS staff_u', 'staff.user_ref=staff_u.id', 'left');
         $this->db->join('users', 'reservations.user_ref=users.id', 'left');
-        $this->db->where('company_ref', $company_ref, TRUE);
+        $this->db->where('reservations.company_ref', $company_ref, TRUE);
 
         $return->recordsFiltered = $return->recordsTotal;
         $return->data = $this->db->get('reservations')->result();
