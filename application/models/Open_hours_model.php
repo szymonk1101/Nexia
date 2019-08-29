@@ -209,8 +209,7 @@ class Open_hours_model extends CI_Model  {
     public function getOpenHoursDataTable($company_ref, $start=0, $length=10, $search, $order, $columns)
     {
         $return = new stdClass();
-        $this->db->where('company_ref', $company_ref);
-
+        $this->db->where('company_ref', $company_ref, TRUE);
         $return->recordsTotal = $this->db->count_all_results('open_hours');
 
 		/*if(isset($search['value']) && !empty($search['value'])) {
@@ -244,6 +243,7 @@ class Open_hours_model extends CI_Model  {
 		
 		$this->db->limit($length, $start);*/
 
+        $this->db->where('company_ref', $company_ref, TRUE);
         $return->recordsFiltered =  $return->recordsTotal;
         $return->data = $this->db->get('open_hours')->result();
 
@@ -253,9 +253,37 @@ class Open_hours_model extends CI_Model  {
     public function getExceptionsDataTable($company_ref, $start=0, $length=10, $search, $order, $columns)
     {
         $return = new stdClass();
-        $this->db->where('company_ref', $company_ref);
-
+        $this->db->where('company_ref', $company_ref, TRUE);
         $return->recordsTotal = $this->db->count_all_results('open_hours_exceptions');
+
+        $this->db->where('company_ref', $company_ref, TRUE);
+        $return->recordsFiltered = $return->recordsTotal;
+        $return->data = $this->db->get('open_hours_exceptions')->result();
+
+        return $return;
+    }
+
+    public function getStaffOpenHoursDataTable($staff_ref, $start=0, $length=10, $search, $order, $columns)
+    {
+        $return = new stdClass();
+        $this->db->where('staff_ref', $staff_ref, TRUE);
+        $return->recordsTotal = $this->db->count_all_results('open_hours', TRUE);
+
+        $this->db->where('staff_ref', $staff_ref, TRUE);
+
+        $return->recordsFiltered =  $return->recordsTotal;
+        $return->data = $this->db->get('open_hours')->result();
+
+        return $return;
+    }
+
+    public function getStaffExceptionsDataTable($staff_ref, $start=0, $length=10, $search, $order, $columns)
+    {
+        $return = new stdClass();
+        $this->db->where('staff_ref', $staff_ref, TRUE);
+        $return->recordsTotal = $this->db->count_all_results('open_hours_exceptions');
+
+        $this->db->where('staff_ref', $staff_ref, TRUE);
 
         $return->recordsFiltered = $return->recordsTotal;
         $return->data = $this->db->get('open_hours_exceptions')->result();

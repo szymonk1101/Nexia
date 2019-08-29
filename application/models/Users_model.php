@@ -9,5 +9,8 @@ class Users_model extends CI_Model  {
         $this->load->database();
     }
     
-
+    public function getUserData($userid)
+    {
+        return $this->db->where('id', $userid, TRUE)->get('users')->row();
+    }
 }

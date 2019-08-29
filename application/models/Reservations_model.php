@@ -32,8 +32,7 @@ class Reservations_model extends CI_Model  {
     public function getReservationsDataTable($company_ref)
     {
         $return = new stdClass();
-        $this->db->where('company_ref', $company_ref);
-
+        $this->db->where('company_ref', $company_ref, TRUE);
         $return->recordsTotal = $this->db->count_all_results('reservations');
 
         $this->db->select('reservations.*, services.name AS service_name, staff_u.email AS staff_email, users.email AS user_email');
@@ -41,6 +40,7 @@ class Reservations_model extends CI_Model  {
         $this->db->join('staff', 'reservations.staff_ref=staff.id', 'left');
         $this->db->join('users AS staff_u', 'staff.user_ref=staff_u.id', 'left');
         $this->db->join('users', 'reservations.user_ref=users.id', 'left');
+        $this->db->where('company_ref', $company_ref, TRUE);
 
         $return->recordsFiltered = $return->recordsTotal;
         $return->data = $this->db->get('reservations')->result();

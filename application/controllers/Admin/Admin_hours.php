@@ -49,7 +49,7 @@ class Admin_hours extends MY_Controller {
     {
         $this->output
             ->set_content_type('application/json')
-            ->set_output(json_encode($this->open_hours_model->getOpenHoursDataTable(1, false, false, false, false, false)));
+            ->set_output(json_encode($this->open_hours_model->getOpenHoursDataTable(1, false, false, false, false, false, false)));
     }
 
     public function getExceptionsDataTable()
@@ -58,5 +58,28 @@ class Admin_hours extends MY_Controller {
             ->set_content_type('application/json')
             ->set_output(json_encode($this->open_hours_model->getExceptionsDataTable(1, false, false, false, false, false)));
     }
+
+    public function getStaffOpenHoursDataTable()
+    {
+        $staff_id = intval($this->input->post('staff_id'));
+
+        if(!$staff_id) exit();
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($this->open_hours_model->getStaffOpenHoursDataTable($staff_id, false, false, false, false, false)));
+    }
+
+    public function getStaffExceptionsDataTable()
+    {
+        $staff_id = intval($this->input->post('staff_id'));
+
+        if(!$staff_id) exit();
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($this->open_hours_model->getStaffExceptionsDataTable($staff_id, false, false, false, false, false)));
+    }
+
 
 }
