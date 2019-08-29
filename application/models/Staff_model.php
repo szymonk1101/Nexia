@@ -9,6 +9,12 @@ class Staff_model extends CI_Model  {
         $this->load->database();
     }
 
+    public function isCompanyHaveUser($company_ref, $userid)
+    {
+        $cnt = $this->db->query("SELECT COUNT(*) AS cnt FROM staff WHERE user_ref = ".$this->db->escape($userid)." AND company_ref = ".$this->db->escape($company_ref))->row()->cnt;
+        return ($cnt>0) ? true : false;
+    }
+
     public function getCompanyStaff($company_ref)
     {
         return $this->db->query("SELECT staff.id, users.email FROM staff INNER JOIN users ON staff.user_ref=users.id WHERE staff.company_ref = ".$this->db->escape($company_ref))->result();

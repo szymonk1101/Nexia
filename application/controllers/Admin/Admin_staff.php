@@ -44,9 +44,27 @@ class Admin_staff extends MY_Controller {
 
         if($this->form_validation->run() !== FALSE) {
 
-            print_r($this->input->post());
+            $email = $this->input->post('email');
+            $user = $this->users_model->getUserByEmail($email);
 
-            exit();
+            if($user) {
+
+                if(!$this->staff_model->isCompanyHaveUser($this->user->data->companyid, $user->id)) {
+
+                    if($this->staff_model->addUserToCompany($this->user->data->companyid, $user->id)) {
+                        $this->session->set_flashdata('alert-success', 'Użytkownik został dodany.');
+                        redirect('admin/staff');
+                    } else {
+                        $view_data['alert_danger'] = 'Wystąpił nieoczekiwany błąd.';
+                    }
+
+                } else {
+                    $view_data['alert_danger'] = 'Ten użytkownik jest już w tej firmie.';
+                }             
+
+            } else {
+                $view_data['alert_danger'] = 'Nie odnaleziono użytkownika o podanym adresie e-mail.';
+            }
             
         } else {
             if(!empty($this->form_validation->error_string()))
