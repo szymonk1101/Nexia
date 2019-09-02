@@ -48,7 +48,7 @@ class Open_hours_model extends CI_Model  {
             $this->db->query("UPDATE open_hours, oh_refs SET valid_to = $valid_from WHERE oh_refs.oh_ref=open_hours.id AND oh_refs.company_ref = $company_ref AND open_hours.company_ref = $company_ref AND (valid_to is null OR valid_to > $valid_from)");
             $this->db->insert('oh_refs', array(
                 'oh_ref' => $oh_id,
-                'company_ref' => $company_ref
+                'company_ref' => $data['company_ref']
             ), TRUE);
         }
 
@@ -119,7 +119,7 @@ class Open_hours_model extends CI_Model  {
                     $hours2 = new stdClass();
                     $hours2->time_from = $staff_open_hours->{$dayname."_from"};
                     $hours2->time_to = $staff_open_hours->{$dayname."_to"};
-                    $result = $this->hours_model->minimumHoursNotFalse($result, $hours2);
+                    $result = $this->hours_model->minimumHours($result, $hours2);
                 }
             }
 
@@ -129,7 +129,7 @@ class Open_hours_model extends CI_Model  {
                     $hours2 = new stdClass();
                     $hours2->time_from = $service_open_hours->{$dayname."_from"};
                     $hours2->time_to = $service_open_hours->{$dayname."_to"};
-                    $result = $this->hours_model->minimumHoursNotFalse($result, $hours2);
+                    $result = $this->hours_model->minimumHours($result, $hours2);
                 }
             }
         }
