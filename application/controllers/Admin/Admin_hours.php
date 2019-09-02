@@ -21,13 +21,41 @@ class Admin_hours extends MY_Controller {
         $this->load->model('staff_model');
         $this->load->model('services_model');
 
-        $this->form_validation->set_rules('name', 'Nazwa', 'required');
+        $this->form_validation->set_rules(array(
+            array(
+                'field' => 'name',
+                'label' => 'Nazwa',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'valid_from',
+                'label' => 'Ważne od',
+                'rules' => 'trim|required'
+            )
+        ));
 
         if($this->form_validation->run() !== FALSE) {
 
-            print_r($this->input->post());
+            $data = $this->input->post();
+            $error = false;
 
-            exit();
+            if($data['valid_to'] && $data['valid_to'] <= $data['valid_from']) {
+                $error .= 'Podaj poprawne daty ważności.';
+            }
+            
+            if($error) {
+                $view_data['alert_danger'] = $error;
+            } else {
+                
+                $data['company_ref'] = $this->user->data->companyid;
+
+                if($this->open_hours_model->add($data)) {
+                    $this->session->set_flashdata('alert-success', 'Nowe godziny zostały dodane.');
+                    redirect('admin/hours/');
+                } else {
+                    $view_data['alert_danger'] = 'Wystąpił nieoczekiwany błąd';
+                }
+            }
             
         } else {
             if(!empty($this->form_validation->error_string()))

@@ -10,6 +10,77 @@ class Open_hours_model extends CI_Model  {
         $this->load->model('hours_model');
     }
 
+    protected function getNextOpenHoursId()
+    {
+        $q = $this->db->query("SELECT MAX(id) AS max FROM open_hours")->row();
+        return ($q->max) ? $q->max+1 : 1;
+    }
+
+    public function add($data)
+    {
+        $this->db->trans_start();
+        $valid_from = $this->db->escape($data['valid_from']);
+        $company_ref = $this->db->escape($data['company_ref']);
+
+        $oh_id = $this->getNextOpenHoursId();
+        
+        if(isset($data['staff_ref'])) {
+            foreach($data['staff_ref'] as $staff_ref) {
+                $this->db->query("UPDATE open_hours, oh_refs SET valid_to = $valid_from WHERE oh_refs.oh_ref=open_hours.id AND oh_refs.staff_ref = ".$this->db->escape($staff_ref)." AND open_hours.company_ref = $company_ref AND (valid_to is null OR valid_to > $valid_from)");
+                $this->db->insert('oh_refs', array(
+                    'oh_ref' => $oh_id,
+                    'staff_ref' => $staff_ref
+                ), TRUE);
+            }
+        }
+
+        if(isset($data['service_ref'])) {
+            foreach($data['service_ref'] as $service_ref) {
+                $this->db->query("UPDATE open_hours, oh_refs SET valid_to = $valid_from WHERE oh_refs.oh_ref=open_hours.id AND oh_refs.service_ref = ".$this->db->escape($service_ref)." AND open_hours.company_ref = $company_ref AND (valid_to is null OR valid_to > $valid_from)");
+                $this->db->insert('oh_refs', array(
+                    'oh_ref' => $oh_id,
+                    'service_ref' => $service_ref
+                ), TRUE);
+            }
+        }
+
+        if((!isset($data['staff_ref']) || empty($data['staff_ref'])) && (!isset($data['service_ref']) || empty($data['service_ref']))) {
+            $this->db->query("UPDATE open_hours, oh_refs SET valid_to = $valid_from WHERE oh_refs.oh_ref=open_hours.id AND oh_refs.company_ref = $company_ref AND open_hours.company_ref = $company_ref AND (valid_to is null OR valid_to > $valid_from)");
+            $this->db->insert('oh_refs', array(
+                'oh_ref' => $oh_id,
+                'company_ref' => $company_ref
+            ), TRUE);
+        }
+
+        $this->db->insert('open_hours', array(
+            'id' => $oh_id,
+            'name' => $data['name'],
+            'mon_from' => setNullValue($data['mon_from']),
+            'mon_to' => setNullValue($data['mon_to']),
+            'tue_from' => setNullValue($data['tue_from']),
+            'tue_to' => setNullValue($data['tue_to']),
+            'wed_from' => setNullValue($data['wed_from']),
+            'wed_to' => setNullValue($data['wed_to']),
+            'thu_from' => setNullValue($data['thu_from']),
+            'thu_to' => setNullValue($data['thu_to']),
+            'fri_from' => setNullValue($data['fri_from']),
+            'fri_to' => setNullValue($data['fri_to']),
+            'sat_from' => setNullValue($data['sat_from']),
+            'sat_to' => setNullValue($data['sat_to']),
+            'sun_from' => setNullValue($data['sun_from']),
+            'sun_to' => setNullValue($data['sun_to']),
+            'valid_from' => $data['valid_from'],
+            'valid_to' => setNullValue($data['valid_to']),
+            'company_ref' => $data['company_ref']
+        ), TRUE);
+
+        $this->db->trans_complete();
+        if($this->db->trans_status() === FALSE) {
+            return false;
+        }
+        return $oh_id;
+    }
+
     // POWINNO DZIAŁAĆ
     public function getOpenHoursByDate($date, $company_ref, $staff_ref = false, $service_ref = false)
     {
@@ -36,29 +107,29 @@ class Open_hours_model extends CI_Model  {
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
-            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours INNER JOIN oh_refs ON open_hours.id=oh_refs.oh_ref WHERE oh_refs.company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
             if(!empty($open_hours)) {
                 $result->time_from = $open_hours->{$dayname.'_from'};
                 $result->time_to = $open_hours->{$dayname.'_to'};
             }
 
             if($staff_ref) {
-                $staff_open_hours = $this->db->query("SELECT id, ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE staff_ref = '$staff_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+                $staff_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours INNER JOIN oh_refs ON open_hours.id=oh_refs.oh_ref WHERE oh_refs.staff_ref = '$staff_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
                 if(!empty($staff_open_hours)) {
                     $hours2 = new stdClass();
                     $hours2->time_from = $staff_open_hours->{$dayname."_from"};
                     $hours2->time_to = $staff_open_hours->{$dayname."_to"};
-                    $result = $this->hours_model->minimumHours($result, $hours2);
+                    $result = $this->hours_model->minimumHoursNotFalse($result, $hours2);
                 }
             }
 
             if($service_ref) {
-                $service_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE service_ref = '$service_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+                $service_open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours INNER JOIN oh_refs ON open_hours.id=oh_refs.oh_ref WHERE oh_refs.service_ref = '$service_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
                 if(!empty($service_open_hours)) {
                     $hours2 = new stdClass();
                     $hours2->time_from = $service_open_hours->{$dayname."_from"};
                     $hours2->time_to = $service_open_hours->{$dayname."_to"};
-                    $result = $this->hours_model->minimumHours($result, $hours2);
+                    $result = $this->hours_model->minimumHoursNotFalse($result, $hours2);
                 }
             }
         }
@@ -167,7 +238,7 @@ class Open_hours_model extends CI_Model  {
             $date_whr .= "AND `date` <= '$to'";
         }
 
-        $open_hours = $this->db->query("SELECT * FROM open_hours WHERE company_ref = '$company_ref' AND ".$valid_whr)->result();
+        $open_hours = $this->db->query("SELECT * FROM open_hours INNER JOIN oh_refs ON open_hours.id=oh_refs.oh_ref WHERE oh_refs.company_ref = '$company_ref' AND ".$valid_whr)->result();
         $exceptions = $this->db->query("SELECT * FROM open_hours_exceptions WHERE company_ref = '$company_ref' AND ".$date_whr)->result();
 
         $result = new stdClass();
@@ -196,7 +267,7 @@ class Open_hours_model extends CI_Model  {
         }
         else {
             $dayname = $this->getColumnDayNameByInteger(date('N', strtotime($date)));
-            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours WHERE company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
+            $open_hours = $this->db->query("SELECT ".$dayname."_from, ".$dayname."_to FROM open_hours INNER JOIN oh_refs ON open_hours.id=oh_refs.oh_ref WHERE oh_refs.company_ref = '$company_ref' AND valid_from <= '$date' AND (valid_to is null OR valid_to > '$date')")->row();
             if(!empty($open_hours)) {
                 $result->time_from = $open_hours->{$dayname.'_from'};
                 $result->time_to = $open_hours->{$dayname.'_to'};
@@ -244,6 +315,7 @@ class Open_hours_model extends CI_Model  {
 		$this->db->limit($length, $start);*/
 
         $this->db->where('company_ref', $company_ref, TRUE);
+        
         $return->recordsFiltered =  $return->recordsTotal;
         $return->data = $this->db->get('open_hours')->result();
 

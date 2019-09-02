@@ -27,15 +27,15 @@
 
                                         <form class="" method="POST" action="<?= base_url('admin/hours/add'); ?>">
                                             <div class="position-relative row form-group"><label for="name" class="col-sm-2 col-form-label">Nazwa</label>
-                                                <div class="col-sm-10"><input name="name" id="name" placeholder="" type="text" class="form-control"></div>
+                                                <div class="col-sm-10"><input name="name" id="name" placeholder="" type="text" class="form-control" value="<?= set_value('name'); ?>" /></div>
                                             </div>
                                             <div class="position-relative row form-group"><label for="valid_from" class="col-sm-2 col-form-label">Ważne od</label>
                                                 <div class="col-sm-10">
-                                                    <input name="valid_from" id="valid_from" placeholder="" type="text" class="form-control input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd hh:mm:ss" im-insert="false">
+                                                    <input name="valid_from" id="valid_from" placeholder="" type="text" class="form-control input-mask-trigger" value="<?= set_value('valid_from'); ?>" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd HH:MM:ss" im-insert="false" />
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group"><label for="valid_to" class="col-sm-2 col-form-label">Ważne do</label>
-                                                <div class="col-sm-10"><input name="valid_to" id="valid_to" placeholder="" type="text" class="form-control input-mask-trigger" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd hh:mm:ss" im-insert="false"></div>
+                                                <div class="col-sm-10"><input name="valid_to" id="valid_to" placeholder="" type="text" class="form-control input-mask-trigger" value="<?= set_value('valid_to'); ?>" data-inputmask-alias="datetime" data-inputmask-inputformat="yyyy-mm-dd HH:MM:ss" im-insert="false" /></div>
                                             </div>
                                             <div class="position-relative row form-group"><label for="staff_ref" class="col-sm-2 col-form-label">Przypisane do pracownika</label>
                                                 <div class="col-sm-10">
@@ -61,10 +61,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Poniedziałek</label>
                                                         <div class="col-sm-5">
-                                                            <input name="mon_from" id="mon_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="mon_from" id="mon_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('mon_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="mon_to" id="mon_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="mon_to" id="mon_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('mon_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -72,10 +72,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Wtorek</label>
                                                         <div class="col-sm-5">
-                                                            <input name="tue_from" id="tue_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="tue_from" id="tue_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('tue_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="tue_to" id="tue_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="tue_to" id="tue_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('tue_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -86,10 +86,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Środa</label>
                                                         <div class="col-sm-5">
-                                                            <input name="wed_from" id="wed_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="wed_from" id="wed_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('wed_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="wed_to" id="wed_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="wed_to" id="wed_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('wed_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -97,10 +97,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Czwartek</label>
                                                         <div class="col-sm-5">
-                                                            <input name="thu_from" id="thu_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="thu_from" id="thu_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('thu_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="thu_to" id="thu_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="thu_to" id="thu_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('thu_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -111,10 +111,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Piątek</label>
                                                         <div class="col-sm-5">
-                                                            <input name="fri_from" id="fri_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="fri_from" id="fri_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('fri_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="fri_to" id="fri_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="fri_to" id="fri_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('fri_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -122,10 +122,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Sobota</label>
                                                         <div class="col-sm-5">
-                                                            <input name="sat_from" id="sat_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="sat_from" id="sat_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('sat_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="sat_from" id="sat_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="sat_to" id="sat_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('sat_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -136,10 +136,10 @@
                                                     <div class="position-relative row form-group">
                                                         <label for="exampleFile" class="col-sm-2 col-form-label">Niedziela</label>
                                                         <div class="col-sm-5">
-                                                            <input name="sun_from" id="sun_from" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="sun_from" id="sun_from" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('sun_from'); ?>" />
                                                         </div>
                                                         <div class="col-sm-5">
-                                                            <input name="sun_to" id="sun_to" placeholder="HH:MM" type="text" class="form-control timepicker">
+                                                            <input name="sun_to" id="sun_to" placeholder="HH:MM" type="text" class="form-control timepicker" value="<?= set_value('sun_to'); ?>" />
                                                         </div>
                                                     </div>
                                                 </div>

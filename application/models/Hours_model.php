@@ -33,6 +33,17 @@ class Hours_model extends CI_Model  {
         return $hours;
     }
 
+    public function minimumHoursNotFalse($hours, $hours_2)
+    {
+        if($hours->time_from < $hours_2->time_from || !$hours->time_from)
+            $hours->time_from = $hours_2->time_from;
+
+        if($hours->time_to > $hours_2->time_to || !$hours->time_to)
+            $hours->time_to = $hours_2->time_to;
+        
+        return $hours;
+    }
+
     /**
      * Wybiera maksymalny zakres time_from - time_to z dwóch zakresów. False zastępuje nie pustym.
      */
