@@ -16,6 +16,11 @@ class Users_model extends CI_Model  {
         return $this->db->select(self::$select)->where('email', $email, TRUE)->get('users')->row();
     }
 
+    public function getUserByEmailOrTelephone($search)
+    {
+        return $this->db->select(self::$select)->where('email', $search, TRUE)->or_where('telephone like \'%'.$this->db->escape_str($search).'\'')->get('users')->row();
+    }
+
     public function getUserData($userid)
     {
         return $this->db->select(self::$select)->where('id', $userid, TRUE)->get('users')->row();

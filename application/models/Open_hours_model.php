@@ -209,9 +209,9 @@ class Open_hours_model extends CI_Model  {
      * - time_from  [HH:MM:SS]
      * - time_to    [HH:MM:SS]
      */
-    public function isTermFree($company_ref, $date, $time_from, $time_to)
+    public function isTermFree($company_ref, $date, $time_from, $time_to, $service_ref, $staff_ref = false)
     {
-        $free_blocks = $this->getFreeHoursForDate($company_ref, $date);
+        $free_blocks = $this->getFreeHoursForDate($date, $company_ref, $service_ref, $staff_ref);
         foreach($free_blocks as $block)
             if($block[0] <= $time_from && $block[1] >= $time_to)
                 return true;

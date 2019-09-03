@@ -8,6 +8,11 @@ class Reservations_model extends CI_Model  {
         parent::__construct();
         $this->load->database();
     }
+
+    public function add($data)
+    {
+        return $this->db->insert('reservations', $data, TRUE);
+    }
     
     public function getReservationsByDate($date, $company_ref, $staff_ref = false, $service_ref = false, $confirmed = true)
     {
