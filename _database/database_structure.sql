@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 29 Sie 2019, 19:22
+-- Czas generowania: 03 Wrz 2019, 18:00
 -- Wersja serwera: 10.1.28-MariaDB
 -- Wersja PHP: 7.1.11
 
@@ -60,6 +60,21 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `oh_refs`
+--
+
+CREATE TABLE IF NOT EXISTS `oh_refs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `oh_ref` int(11) NOT NULL,
+  `company_ref` int(11) DEFAULT NULL,
+  `staff_ref` int(11) DEFAULT NULL,
+  `service_ref` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `open_hours`
 --
 
@@ -84,8 +99,6 @@ CREATE TABLE IF NOT EXISTS `open_hours` (
   `valid_to` datetime DEFAULT NULL,
   `is_default` tinyint(4) NOT NULL DEFAULT '0',
   `company_ref` int(11) NOT NULL,
-  `staff_ref` int(11) DEFAULT NULL,
-  `service_ref` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

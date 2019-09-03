@@ -338,10 +338,12 @@ class Open_hours_model extends CI_Model  {
     public function getStaffOpenHoursDataTable($staff_ref, $start=0, $length=10, $search, $order, $columns)
     {
         $return = new stdClass();
-        $this->db->where('staff_ref', $staff_ref, TRUE);
+        $this->db->join('oh_refs', 'open_hours.id=oh_refs.oh_ref');
+        $this->db->where('oh_refs.staff_ref', $staff_ref, TRUE);
         $return->recordsTotal = $this->db->count_all_results('open_hours', TRUE);
 
-        $this->db->where('staff_ref', $staff_ref, TRUE);
+        $this->db->join('oh_refs', 'open_hours.id=oh_refs.oh_ref');
+        $this->db->where('oh_refs.staff_ref', $staff_ref, TRUE);
 
         $return->recordsFiltered =  $return->recordsTotal;
         $return->data = $this->db->get('open_hours')->result();
