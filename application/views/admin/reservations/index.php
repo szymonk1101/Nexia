@@ -117,6 +117,7 @@
 <script type="text/javascript">
 
 var reservations_datatable_ajax_url = '<?= base_url('admin/reservations/getReservationsDataTable'); ?>';
+var confirm_reservation_url = '<?= base_url('admin/api/reservations/confirmReservation'); ?>';
 
 </script>
 

@@ -26,13 +26,23 @@
                                         <?php $this->load->view('admin/partials/alerts'); ?>
 
                                         <form class="" method="POST" action="<?= base_url('admin/reservations/create'); ?>">
+
+                                            <?php if(isset($term_not_free) && !empty($term_not_free)): ?>
+                                            <input type="hidden" name="confirm_error" value="1" />
+                                            <div class="alert alert-success" role="alert">
+                                                <p><?= $term_not_free; ?></p>
+                                                <hr>
+                                                <button class="btn btn-success">Utwórz rezerwację mimo wszystko</button>
+                                            </div>
+                                            <?php endif; ?>
+
                                             <div class="position-relative row form-group"><label for="service_ref" class="col-sm-2 col-form-label">Usługa</label>
                                                 <div class="col-sm-10">
                                                     <select name="service_ref" id="service_ref" class="form-control">
-                                                    <option value="">Wybierz..</option>
-                                                    <?php foreach($services as $s): ?>
-                                                        <option value="<?= $s->id; ?>" data-duration="<?= $s->duration; ?>"><?= $s->name; ?></option>
-                                                    <?php endforeach; ?>
+                                                        <option value="" <?= set_select('service_ref', '', TRUE); ?> >Wybierz..</option>
+                                                        <?php foreach($services as $s): ?>
+                                                        <option value="<?= $s->id; ?>" data-duration="<?= $s->duration; ?>" <?= set_select('service_ref', $s->id); ?> ><?= $s->name; ?></option>
+                                                        <?php endforeach; ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -53,7 +63,7 @@
                                             </div>
                                             <div class="position-relative row form-group"><label for="user_ref" class="col-sm-2 col-form-label">Klient</label>
                                                 <div class="col-sm-10">
-                                                    <input name="user_ref" id="user_ref" placeholder="" type="text" class="form-control" value="<?= set_value('user_ref'); ?>" />
+                                                    <input name="user_ref" id="user_ref" placeholder="Podaj e-mail bądź numer telefonu" type="text" class="form-control" value="<?= set_value('user_ref'); ?>" />
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group"><label for="staff_ref" class="col-sm-2 col-form-label">Pracownik</label>
@@ -69,14 +79,14 @@
                                             <div class="position-relative row form-group"><label for="confirmed" class="col-sm-2 col-form-label">Potwierdzona</label>
                                                 <div class="col-sm-10">
                                                     <div class="position-relative form-check">
-                                                        <label class="form-check-label"><input name="confirmed" id="confirmed" type="checkbox" class="form-check-input" /> &nbsp;</label>
+                                                        <label class="form-check-label"><input name="confirmed" id="confirmed" type="checkbox" class="form-check-input" value="1" /> &nbsp;</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group"><label for="paid" class="col-sm-2 col-form-label">Opłacona</label>
                                                 <div class="col-sm-10">
                                                     <div class="position-relative form-check">
-                                                        <label class="form-check-label"><input name="paid" id="paid" type="checkbox" class="form-check-input" /> &nbsp;</label>
+                                                        <label class="form-check-label"><input name="paid" id="paid" type="checkbox" class="form-check-input" value="1" /> &nbsp;</label>
                                                     </div>
                                                 </div>
                                             </div>

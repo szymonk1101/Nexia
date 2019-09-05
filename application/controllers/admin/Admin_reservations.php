@@ -20,6 +20,8 @@ class Admin_reservations extends MY_Controller {
     {
         $this->load->model('staff_model');
         $this->load->model('services_model');
+        $this->load->model('open_hours_model');
+        $this->load->model('users_model');
         $view_data = array();
 
         $this->form_validation->set_rules(array(
@@ -55,18 +57,16 @@ class Admin_reservations extends MY_Controller {
             $data['time'] .= ':00'; // FOR SUCCESS VALIDATION
             $data['time_to'] = date('H:i:s', strtotime('+'.intval($data['duration']).' minutes', strtotime($data['time'])));
 
-            $data['staff_ref'] = FALSE; // !!!!!!!!!!!!!!!!!!!!!!!
+            $data['staff_ref'] = setNullValue($data['staff_ref']);
 
-            $this->load->model('open_hours_model');
-            if(!$this->open_hours_model->isTermFree($this->user->data->companyid, $data['date'], $data['time'], $data['time_to'], $data['service_ref'], $data['staff_ref'])) {
+            if(!$data['confirm_error'] && !$this->open_hours_model->isTermFree($this->user->data->companyid, $data['date'], $data['time'], $data['time_to'], $data['service_ref'], $data['staff_ref'])) {
                 $view_data['term_not_free'] = 'Wybrany przez Ciebie termin nie jest dostępny. Czy mimo to chcesz utworzyć rezerwacje?';
             } else {
 
-                $this->load->model('users_model');
                 $user = $this->users_model->getUserByEmailOrTelephone($data['user_ref']);
 
                 if(empty($user)) {
-
+                    $view_data['alert_danger'] = 'Nie odnaleziono wybranego klienta.';
                 } else {
 
                     $data['user_ref'] = $user->id;
@@ -75,7 +75,7 @@ class Admin_reservations extends MY_Controller {
                         'user_ref' => $data['user_ref'],
                         'company_ref' => $this->user->data->companyid,
                         'service_ref' => $data['service_ref'],
-                        'staff_ref' => isset($data['staff_ref']) ? setNullValue($data['staff_ref']) : NULL,
+                        'staff_ref' => $data['staff_ref'],
                         'date' => $data['date'],
                         'time_from' => $data['time'],
                         'time_to' => $data['time_to'],

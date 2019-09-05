@@ -68,6 +68,17 @@ $(document).ready(() => {
 
         if(confirm("Czy na pewno chcesz zatwierdzić rezerwacje nr "+resid+"?")) {
 
+            $.ajax({
+                url: confirm_reservation_url,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    'resid': resid
+                }
+            })
+            .done((data) => {
+
+            });
         }
 
     });

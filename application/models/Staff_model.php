@@ -26,6 +26,12 @@ class Staff_model extends CI_Model  {
         return (!empty($query)) ? $query->user_ref : false;
     }
 
+    public function getStaffIdByUserEmailOrTelephone($search)
+    {
+        $staff = $this->db->select('staff.id')->join('users', 'staff.user_ref=users.id')->where('users.email', $search, TRUE)->or_where('users.telephone like \'%'.$this->db->escape_str($search).'\'')->get('staff')->row();
+        return ($staff) ? $staff->id : 0;
+    }
+
     public function getStaffDataTable($company_ref)
     {
         $return = new stdClass();
