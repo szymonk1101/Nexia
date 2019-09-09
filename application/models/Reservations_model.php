@@ -49,6 +49,21 @@ class Reservations_model extends CI_Model  {
         return $this->db->query("SELECT * FROM reservations WHERE staff_ref = '$staff_ref' AND `date` = '$date'")->result();
     }
 
+    public function getLastReservations($company_ref, $confirmed = FALSE, $limit = 15)
+    {
+        $this->db->select('reservations.*, services.name AS service_name, staff_u.email AS staff_email, users.email AS user_email')
+            ->where('reservations.company_ref', $company_ref, TRUE)
+            ->join('services', 'reservations.service_ref=services.id', 'left')
+            ->join('staff', 'reservations.staff_ref=staff.id', 'left')
+            ->join('users AS staff_u', 'staff.user_ref=staff_u.id', 'left')
+            ->join('users', 'reservations.user_ref=users.id', 'left')
+            ->order_by('reservations.created', 'desc');
+        if($confirmed !== FALSE)
+            $this->db->where('confirmed', 1);
+
+        return $this->db->limit($limit)->get('reservations')->result();
+    }
+
     public function getReservationsDataTable($company_ref)
     {
         $return = new stdClass();

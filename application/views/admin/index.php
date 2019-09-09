@@ -156,73 +156,26 @@
                                         <div class="scroll-area-lg">
                                             <div class="scrollbar-container">
                                                 <ul class="list-group">
+                                                    <?php foreach($last_reservations as $res): ?>
                                                     <li class="list-group-item">
                                                         <div class="widget-content p-0">
                                                             <div class="widget-content-wrapper">
-                                                                <div class="widget-content-left mr-3">
-                                                                    <img width="42" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                                                </div>
                                                                 <div class="widget-content-left">
-                                                                    <div class="widget-heading">Alina Mcloughlin</div>
-                                                                    <div class="widget-subheading">A short profile description</div>
+                                                                    <div class="widget-heading"><?= $res->service_name.' - <a href="#">'.$res->user_email.'</a>'; ?></div>
+                                                                    <div class="widget-subheading">
+                                                                        <?= $res->date.', '.cutTimeToMinutes($res->time_from).' - '.cutTimeToMinutes($res->time_to); ?>
+                                                                        <?= ($res->staff_ref) ? ', '.$res->staff_email : ''; ?>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="widget-content-right">
                                                                     <div role="group" class="btn-group-sm btn-group">
-                                                                        <button type="button" class="btn-shadow btn btn-primary">Hire</button>
-                                                                        <button type="button" class="btn-shadow btn btn-primary">Fire</button>
+                                                                        <button type="button" class="btn-shadow btn btn-success">Potwierdź</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <div class="widget-content p-0">
-                                                            <div class="widget-content-wrapper">
-                                                                <div class="widget-content-left mr-3">
-                                                                    <img width="42" class="rounded" src="assets/images/avatars/5.jpg" alt="">
-                                                                </div>
-                                                                <div class="widget-content-left">
-                                                                    <div class="widget-heading">Ruben Tillman</div>
-                                                                    <div class="widget-subheading">Etiam sit amet orci eget eros faucibus</div>
-                                                                </div>
-                                                                <div class="widget-content-right">
-                                                                    <div class="badge badge-danger">NEW</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <div class="widget-content p-0">
-                                                            <div class="widget-content-wrapper">
-                                                                <div class="widget-content-left mr-3">
-                                                                    <img width="42" class="rounded-circle" src="assets/images/avatars/8.jpg" alt="">
-                                                                </div>
-                                                                <div class="widget-content-left">
-                                                                    <div class="widget-heading">Vinnie Wagstaff</div>
-                                                                </div>
-                                                                <div class="widget-content-right">
-                                                                    <button class="btn-pill btn-hover-shine btn btn-focus btn-sm">Details</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <div class="widget-content p-0">
-                                                            <div class="widget-content-wrapper">
-                                                                <div class="widget-content-left mr-3">
-                                                                    <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg" alt="">
-                                                                </div>
-                                                                <div class="widget-content-left">
-                                                                    <div class="widget-heading">Ella-Rose Henry</div>
-                                                                    <div class="widget-subheading">Lorem ipsum dolor sit amet, consectetuer</div>
-                                                                </div>
-                                                                <div class="widget-content-right">
-                                                                    <div class="widget-numbers text-primary"><span>$ 568</span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>

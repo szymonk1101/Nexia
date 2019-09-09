@@ -12,6 +12,8 @@ class Admin extends MY_Controller {
 	public function index()
 	{
         $this->checkIsLoggedIn('admin/login');
+        $this->load->model('reservations_model');
+
 
         $this->load->model('open_hours_model');
 
@@ -35,6 +37,7 @@ class Admin extends MY_Controller {
 
         //$data['free'] = $this->hours_model->mergeHours($hours_1, $hours_2);
 
+        $data['last_reservations'] = $this->reservations_model->getLastReservations($this->user->data->companyid, 0);
         $this->load->view('admin/index', $data);
     }
     
