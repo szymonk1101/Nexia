@@ -32,7 +32,7 @@ $(document).ready(() => {
             {
                 data: 'staff_email',
                 render: (data,type,row) => {
-                    return (data) ? '<a href="#">'+data+'</a>' : '';
+                    return (data) ? '<a href="'+staff_details_url+row.staff_ref+'">'+data+'</a>' : '';
                 }
             },
             {
@@ -62,23 +62,38 @@ $(document).ready(() => {
         ]
     });
 
+    var TOCONFIRM = false;
+
     $(document).on('click', '.confirm_res', (ev) => {
     
-        let resid = $(ev.currentTarget).data('id');
-
-        if(confirm("Czy na pewno chcesz zatwierdzić rezerwacje nr "+resid+"?")) {
+        let sendConfirmAjax = (resid, confirm) => {
 
             $.ajax({
                 url: confirm_reservation_url,
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    'resid': resid
+                    'resid': resid,
+                    'confirm': (TOCONFIRM == resid) ? 1 : 0
                 }
             })
             .done((data) => {
-
+                if(data.status == 2) {
+                    TOCONFIRM = resid;
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                    if(data.status == 1) {
+                        location.reload();
+                    }
+                }
             });
+        };
+
+        let resid = $(ev.currentTarget).data('id');
+
+        if(confirm("Czy na pewno chcesz zatwierdzić rezerwacje nr "+resid+"?")) {
+            sendConfirmAjax(resid, 0);
         }
 
     });
@@ -88,7 +103,21 @@ $(document).ready(() => {
         let resid = $(ev.currentTarget).data('id');
 
         if(confirm("Czy na pewno chcesz oznaczyć rezerwacje nr "+resid+" jako opłaconą?")) {
-
+            $.ajax({
+                url: set_paid_reservation_url,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    'resid': resid,
+                    'paid': 1
+                }
+            })
+            .done((data) => {
+                alert(data.message);
+                if(data.status == 1) {
+                    location.reload();
+                }
+            });
         }
 
     });
@@ -98,7 +127,21 @@ $(document).ready(() => {
         let resid = $(ev.currentTarget).data('id');
 
         if(confirm("Czy na pewno chcesz oznaczyć rezerwacje nr "+resid+" jako nieopłaconą?")) {
-
+            $.ajax({
+                url: set_paid_reservation_url,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    'resid': resid,
+                    'paid': 0
+                }
+            })
+            .done((data) => {
+                alert(data.message);
+                if(data.status == 1) {
+                    location.reload();
+                }
+            });
         }
 
     });

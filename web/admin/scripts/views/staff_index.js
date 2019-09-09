@@ -9,13 +9,13 @@ $(document).ready(() => {
         language: { url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Polish.json' },
         columns: [
             {
-                data: 'id',
-                render: (data,type,row) => {
-                    return '<a href="'+staff_details_url+data+'">'+data+'</a>';
-                }
+                data: 'id'
             },
             {
                 data: 'email',
+                render: (data,type,row) => {
+                    return '<a href="'+staff_details_url+row.id+'">'+data+'</a>';
+                }
             },
             {
                 data: 'rank',

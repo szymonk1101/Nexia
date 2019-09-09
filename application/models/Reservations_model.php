@@ -13,6 +13,21 @@ class Reservations_model extends CI_Model  {
     {
         return $this->db->insert('reservations', $data, TRUE);
     }
+
+    public function get($resid)
+    {
+        return $this->db->where('id', $resid, TRUE)->get('reservations')->row();
+    }
+
+    public function confirm($resid)
+    {
+        return $this->db->where('id', $resid, TRUE)->update('reservations', array('confirmed' => 1));
+    }
+
+    public function setPaid($resid, $paid)
+    {
+        return $this->db->where('id', $resid, TRUE)->update('reservations', array('paid' => $paid));
+    }
     
     public function getReservationsByDate($date, $company_ref, $staff_ref = false, $service_ref = false, $confirmed = true)
     {

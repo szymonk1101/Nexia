@@ -12,6 +12,9 @@ define('RESERVATION_ACCEPTED',  1);
 define('RESERVATION_REJECTED',  2);
 define('RESERVATION_FINISHED',  3);
 
+define('PAYMENT_METHOD_TPAY',   1);
+define('PAYMENT_METHOD_CASH',   2);
+
 define('NOTIFICATION_ALL',      0); // to all users
 define('NOTIFICATION_USER',     1); // to specific user
 define('NOTIFICATION_ONLINE',   2); // to all online

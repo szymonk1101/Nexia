@@ -118,6 +118,8 @@
 
 var reservations_datatable_ajax_url = '<?= base_url('admin/reservations/getReservationsDataTable'); ?>';
 var confirm_reservation_url = '<?= base_url('admin/api/reservations/confirmReservation'); ?>';
+var set_paid_reservation_url = '<?= base_url('admin/api/reservations/setPaidReservation'); ?>';
+var staff_details_url = '<?= base_url('admin/staff/details/'); ?>';
 
 </script>
 
