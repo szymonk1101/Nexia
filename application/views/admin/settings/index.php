@@ -87,11 +87,81 @@
                         <div class="tab-content">
 
                             <div class="tab-pane tabs-animation fade show active" id="tab-content-main" role="tabpanel">
-                                Ogólne
+                                <div class="row">
+									<div class="col-md-12">
+										<div class="main-card mb-3 card">   
+											<div class="card-body">
+												<h5 class="card-title">Informacje ogólne</h5>
+												
+												<div class="position-relative row form-group">
+													<label for="company_name" class="col-sm-2 col-form-label">Nazwa</label>
+													<div class="col-sm-10">
+														<input name="company_name" id="company_name" placeholder="" type="text" class="form-control" value="<?= set_value('company_name'); ?>" />
+													</div>
+												</div>
+												<div class="position-relative row form-group">
+													<label for="company_shortname" class="col-sm-2 col-form-label">Skrócona nazwa</label>
+													<div class="col-sm-10">
+														<input name="company_shortname" id="company_shortname" placeholder="" type="text" class="form-control" value="<?= set_value('company_shortname'); ?>" />
+													</div>
+												</div>
+												<div class="position-relative row form-group">
+													<label for="company_logo" class="col-sm-2 col-form-label">Logo</label>
+													<div class="col-sm-10">
+														<input name="company_logo" id="company_logo" type="file" class="form-control" value="<?= set_value('company_logo'); ?>" />
+													</div>
+												</div>
+												<div class="position-relative row form-group">
+													<label for="company_active" class="col-sm-2 col-form-label">Aktywna</label>
+													<div class="col-sm-10">
+														<select name="company_active" id="company_active" class="form-control">
+															<option value="1" <?= set_select('company_active', 1, TRUE); ?> >Tak</option>
+															<option value="0" <?= set_select('company_active', 0); ?> >Nie</option>
+														</select>
+													</div>
+												</div>
+												
+												
+											</div>
+										</div>
+									</div>
+								</div>
                             </div>
+							
                             <div class="tab-pane tabs-animation fade" id="tab-content-staff" role="tabpanel">
-                                Pracowcniy
+								<div class="row">
+									<div class="col-md-12">
+										<div class="main-card mb-3 card">   
+											<div class="card-body">
+												<h5 class="card-title">G</h5>
+												
+												<div class="position-relative row form-group">
+													<label for="staff_multi_reservations" class="col-sm-2 col-form-label">Zezwalaj na kilka rezerwacji w jednej chwili</label>
+													<div class="col-sm-10">
+														<select name="staff_multi_reservations" id="staff_multi_reservations" class="form-control">
+															<option value="1" <?= set_select('staff_multi_reservations', 1, TRUE); ?> >Tak</option>
+															<option value="0" <?= set_select('staff_multi_reservations', 0); ?> >Nie</option>
+														</select>
+													</div>
+												</div>
+												<div class="position-relative row form-group">
+													<label for="staff_breaks" class="col-sm-2 col-form-label">Zezwalaj na przerwy</label>
+													<div class="col-sm-10">
+														<select name="staff_breaks" id="staff_breaks" class="form-control">
+															<option value="1" <?= set_select('staff_breaks', 1, TRUE); ?> >Tak</option>
+															<option value="0" <?= set_select('staff_breaks', 0); ?> >Nie</option>
+														</select>
+													</div>
+												</div>
+												
+												
+												
+											</div>
+										</div>
+									</div>
+								</div>
                             </div>
+							
                             <div class="tab-pane tabs-animation fade" id="tab-content-hours" role="tabpanel">
                                 Godziny
                             </div>
