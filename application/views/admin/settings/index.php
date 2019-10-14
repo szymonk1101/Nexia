@@ -84,48 +84,56 @@
                                 </a>
                             </li>
                         </ul>
+
+                        <?php $this->load->view('admin/partials/alerts'); ?>
+
                         <div class="tab-content">
 
                             <div class="tab-pane tabs-animation fade show active" id="tab-content-main" role="tabpanel">
-                                <div class="row">
-									<div class="col-md-12">
-										<div class="main-card mb-3 card">   
-											<div class="card-body">
-												<h5 class="card-title">Informacje ogólne</h5>
-												
-												<div class="position-relative row form-group">
-													<label for="company_name" class="col-sm-2 col-form-label">Nazwa</label>
-													<div class="col-sm-10">
-														<input name="company_name" id="company_name" placeholder="" type="text" class="form-control" value="<?= set_value('company_name'); ?>" />
-													</div>
-												</div>
-												<div class="position-relative row form-group">
-													<label for="company_shortname" class="col-sm-2 col-form-label">Skrócona nazwa</label>
-													<div class="col-sm-10">
-														<input name="company_shortname" id="company_shortname" placeholder="" type="text" class="form-control" value="<?= set_value('company_shortname'); ?>" />
-													</div>
-												</div>
-												<div class="position-relative row form-group">
-													<label for="company_logo" class="col-sm-2 col-form-label">Logo</label>
-													<div class="col-sm-10">
-														<input name="company_logo" id="company_logo" type="file" class="form-control" value="<?= set_value('company_logo'); ?>" />
-													</div>
-												</div>
-												<div class="position-relative row form-group">
-													<label for="company_active" class="col-sm-2 col-form-label">Aktywna</label>
-													<div class="col-sm-10">
-														<select name="company_active" id="company_active" class="form-control">
-															<option value="1" <?= set_select('company_active', 1, TRUE); ?> >Tak</option>
-															<option value="0" <?= set_select('company_active', 0); ?> >Nie</option>
-														</select>
-													</div>
-												</div>
-												
-												
-											</div>
-										</div>
-									</div>
-								</div>
+                                <form action="<?= base_url('admin/settings/save'); ?>" method="POST" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="main-card mb-3 card">   
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Informacje ogólne</h5>
+                                                    
+                                                    <div class="position-relative row form-group">
+                                                        <label for="company_name" class="col-sm-2 col-form-label">Nazwa</label>
+                                                        <div class="col-sm-10">
+                                                            <input name="company_name" id="company_name" placeholder="" type="text" class="form-control" value="<?= isset($setting['company_name']) ? $setting['company_name']->value_str : ''; ?>" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="company_shortname" class="col-sm-2 col-form-label">Skrócona nazwa</label>
+                                                        <div class="col-sm-10">
+                                                            <input name="company_shortname" id="company_shortname" placeholder="" type="text" class="form-control" value="<?= isset($setting['company_shortname']) ? $setting['company_shortname']->value_str : ''; ?>" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="company_logo" class="col-sm-2 col-form-label">Logo</label>
+                                                        <div class="col-sm-10">
+                                                            <input name="company_logo" id="company_logo" type="file" class="form-control-file" value="<?= set_value('company_logo'); ?>" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="company_active" class="col-sm-2 col-form-label">Aktywna</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="company_active" id="company_active" class="form-control">
+                                                                <option value="1" <?= (isset($setting['company_active']) && $setting['company_active']->value == 1) ? 'selected' : ''; ?> >Tak</option>
+                                                                <option value="0" <?= (isset($setting['company_active']) && $setting['company_active']->value == 0) ? 'selected' : ''; ?> >Nie</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                <div class="d-block text-right card-footer">
+                                                    <button class="btn btn-success btn-lg">Zapisz</button>
+                                                </div>
+                                            </div>
+                                        </div>
+								    </div>
+                                </form>
                             </div>
 							
                             <div class="tab-pane tabs-animation fade" id="tab-content-staff" role="tabpanel">
