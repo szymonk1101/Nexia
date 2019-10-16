@@ -137,37 +137,42 @@
                             </div>
 							
                             <div class="tab-pane tabs-animation fade" id="tab-content-staff" role="tabpanel">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="main-card mb-3 card">   
-											<div class="card-body">
-												<h5 class="card-title">G</h5>
-												
-												<div class="position-relative row form-group">
-													<label for="staff_multi_reservations" class="col-sm-2 col-form-label">Zezwalaj na kilka rezerwacji w jednej chwili</label>
-													<div class="col-sm-10">
-														<select name="staff_multi_reservations" id="staff_multi_reservations" class="form-control">
-															<option value="1" <?= set_select('staff_multi_reservations', 1, TRUE); ?> >Tak</option>
-															<option value="0" <?= set_select('staff_multi_reservations', 0); ?> >Nie</option>
-														</select>
-													</div>
-												</div>
-												<div class="position-relative row form-group">
-													<label for="staff_breaks" class="col-sm-2 col-form-label">Zezwalaj na przerwy</label>
-													<div class="col-sm-10">
-														<select name="staff_breaks" id="staff_breaks" class="form-control">
-															<option value="1" <?= set_select('staff_breaks', 1, TRUE); ?> >Tak</option>
-															<option value="0" <?= set_select('staff_breaks', 0); ?> >Nie</option>
-														</select>
-													</div>
-												</div>
-												
-												
-												
-											</div>
-										</div>
-									</div>
-								</div>
+                                <form action="<?= base_url('admin/settings/save'); ?>" method="POST" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="main-card mb-3 card">   
+                                                <div class="card-body">
+                                                    <h5 class="card-title">G</h5>
+                                                    
+                                                    <div class="position-relative row form-group">
+                                                        <label for="staff_multi_reservations" class="col-sm-2 col-form-label">Zezwalaj na kilka rezerwacji w jednej chwili</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="staff_multi_reservations" id="staff_multi_reservations" class="form-control">
+                                                                <option value="1" <?= (isset($setting['staff_multi_reservations']) && $setting['staff_multi_reservations']->value == 1) ? 'selected' : ''; ?> >Tak</option>
+                                                                <option value="0" <?= (isset($setting['staff_multi_reservations']) && $setting['staff_multi_reservations']->value == 0) ? 'selected' : ''; ?> >Nie</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <label for="staff_breaks" class="col-sm-2 col-form-label">Zezwalaj na przerwy</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="staff_breaks" id="staff_breaks" class="form-control">
+                                                                <option value="1" <?= (isset($setting['staff_breaks']) && $setting['staff_breaks']->value == 1) ? 'selected' : ''; ?> >Tak</option>
+                                                                <option value="0" <?= (isset($setting['staff_breaks']) && $setting['staff_breaks']->value == 0) ? 'selected' : ''; ?> >Nie</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div class="d-block text-right card-footer">
+                                                    <button class="btn btn-success btn-lg">Zapisz</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 							
                             <div class="tab-pane tabs-animation fade" id="tab-content-hours" role="tabpanel">
