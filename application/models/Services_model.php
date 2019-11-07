@@ -8,6 +8,11 @@ class Services_model extends CI_Model  {
         parent::__construct();
         $this->load->database();
     }
+
+    public function getDetails($service_ref)
+    {
+        return $this->db->where('id', $service_ref, TRUE)->get('services')->result();
+    }
     
     public function getCompanyAllServices($company_ref)
     {

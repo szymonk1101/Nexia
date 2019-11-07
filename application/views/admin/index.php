@@ -30,6 +30,14 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
+                                                <a href="<?= base_url('admin/breaks/add'); ?>" class="nav-link">
+                                                    <i class="nav-link-icon fa fa-hourglass"></i>
+                                                    <span>
+                                                        Ustal przerwę
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
                                                 <a class="nav-link">
                                                     <i class="nav-link-icon lnr-book"></i>
                                                     <span>
