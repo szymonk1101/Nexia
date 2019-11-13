@@ -19,6 +19,45 @@
 
     <link href="<?= base_url('web/main.8d288f825d8dffbbe55e.css'); ?>" rel="stylesheet" />
     <link href="<?= base_url('web/admin/app.css'); ?>" rel="stylesheet" />
+
+    <style type="text/css">
+      #kanaly div.selected {
+         border: 2px solid #1E63A9;
+         border-radius: 4px 4px 4px 4px;
+         margin: 3px 3px -1px -1px;
+      }
+      #kanaly div {
+         /*background-position: left top;
+         background-repeat: no-repeat;
+         border: 1px solid #DADADA;
+         cursor: pointer;
+         float: left;
+         height: 88px;
+         margin-right: 4px;
+         margin-top: 4px;
+         padding: 5px;
+         position: relative;
+         width: 127px;
+         z-index: 4;*/
+         background-color: white;
+         background-position: center center;
+         background-repeat: no-repeat;
+         background-size: contain;
+         border: 1px solid #b2b2b2;
+         border-radius: 0.2em;
+         cursor: pointer;
+         display: inline-block;
+         width: 120px;
+         height:70px;
+         margin-right: 4px;
+         margin-top: 4px;
+      }
+
+      #kanaly div p.label {
+         display:none;
+      }
+   </style>
+
 </head>
 <body>
 
@@ -83,6 +122,10 @@
                                                     
                                                 </select>
                                             </div>
+
+                                            <h4>Podsumowanie:</h4>
+                                            <p id="ChooseSummary"></p>
+
                                         </div>
                                     </div>
                                     
@@ -154,17 +197,18 @@
                                                             <fieldset class="position-relative form-group">
                                                                 <div class="position-relative form-check">
                                                                     <label class="form-check-label">
-                                                                        <input name="paymentmethod" type="radio" class="form-check-input">
+                                                                        <input name="paymentmethod" type="radio" class="form-check-input" value="<?= PAYMENT_METHOD_CASH; ?>" checked="1" />
                                                                         Gotówka w lokalu
                                                                     </label>
                                                                 </div>
                                                                 <div class="position-relative form-check">
                                                                     <label class="form-check-label">
-                                                                        <input name="paymentmethod" type="radio" class="form-check-input">
+                                                                        <input name="paymentmethod" type="radio" class="form-check-input" value="<?= PAYMENT_METHOD_TPAY; ?>" />
                                                                         Płatność internetowa (Tpay)
                                                                     </label>
                                                                 </div>
                                                             </fieldset>
+                                                            <div id="tpay_banks" style="display:none;"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -236,11 +280,17 @@
 
     <script type="text/javascript" src="<?= base_url('web/admin/app.js'); ?>"></script> 
 
+    <script type="text/javascript" src="https://secure.tpay.com/groups-<?= $this->config->item('tpay_merchant_id'); ?>1.js"></script>
+
+
     <script type="text/javascript">
 
     $(document).ready(() => {
 
+        let service = '';
         let date = '<?= date('Y-m-d'); ?>';
+        let payment_method = 0;
+        let bank_channel = false;
 
         let reload = () => {
 
@@ -264,7 +314,7 @@
 
                 data.forEach((el) => {
                         
-                    $('#Hours').append('<option value="">'+el[0]+'</option>');                  
+                    $('#Hours').append('<option value="'+el[0]+'">'+el[0]+'</option>');                  
 
                 });
                 
@@ -275,7 +325,21 @@
 
         $('#Staff, #Service').on('change', reload);
 
+        $('input[name="paymentmethod"]').on('click', () => {
+
+            payment_method = $('input[name="paymentmethod"]:checked').val();
+
+            if(payment_method == <?= PAYMENT_METHOD_TPAY; ?>) {
+                $('#tpay_banks').slideDown();
+            } else {
+                $('#tpay_banks').slideUp();
+            }
+
+        });
+
         $('#smartwizard').smartWizard({
+            selected: 0,
+            useURLhash: false,
             keyNavigation: false,
             cycleSteps: false,
             toolbarSettings: {
@@ -288,37 +352,100 @@
         });
 
         $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+            
+            let sendData = {
+                'step': stepNumber
+            };
+
+            if(stepNumber == 0)
+            {
+                sendData.service_ref = $('#Service').val();
+                sendData.staff_ref = $('#Staff').val();
+                sendData.date = date;
+                sendData.time = $('#Hours').val();
+            }
+
             return confirm("Do you want to leave the step "+stepNumber+"?");
+
+            // walidacja w JS
+
+            /*$.ajax({
+                url: '<?= base_url('api/reservations/verifyWizardDataStep'); ?>',
+                method: 'POST',
+                dataType: 'json',
+                data: sendData
+            })
+            .done((data) => {
+
+
+                console.log(data);
+            });*/
+
+            //return false;
+
         });
 
         var calendarEl = document.getElementById('calendar');
 
+        var today = new Date();
+
         var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'interaction', 'dayGrid' ],
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: ''
-        },
-        defaultDate: '<?= date('Y-m-d'); ?>',
-        navLinks: false, // can click day/week names to navigate views
-        selectable: true,
-        selectMirror: false,
-        select: function(arg) {
-            console.log(arg);
-            date = arg.startStr;
-            reload();
-        },
-        editable: true,
-        eventLimit: true, // allow "more" link when too many events
-        events: [
+            plugins: [ 'interaction', 'dayGrid' ],
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            defaultDate: '<?= date('Y-m-d'); ?>',
+            navLinks: false, // can click day/week names to navigate views
+            selectable: true,
+            selectMirror: false,
+            unselectAuto: false,
+            select: function(arg) {
+                //this.select(arg.start);
+                if(arg.start < today) {
+                    date = false;
+                    this.unselect(arg.jsEvent);
+                    return;
+                }
+
+                console.log(arg);
+                date = arg.startStr;
+                reload();
+            },
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
 
 
-        ]
+            ]
         });
 
         calendar.render();
     });
+
+    function ShowChannels()
+    {
+        var str = '<div id="kanaly">';
+       
+        for(var i = 0; i < tr_groups.length; i++)
+        {
+            var id = 'bank'+tr_groups[i][0];
+            var width_style = '';
+            var idi = 'i_'+id;
+            if(tr_groups[i][0] == 40) width_style = 'width:270px'; else width_style = '';
+            str +='<div id="'+id+'" onclick=\'document.getElementById("'+idi+'").checked=true;bank_channel='+tr_groups[i][0]+';\' style="background-position:center;background-image:url('+tr_groups[i][3]+');'+width_style+'">';
+            str +='<input id="'+idi+'" type="radio" value="'+tr_groups[i][0]+'" name="grupa" '; if (i==0) str +='checked="checked"  />'; else str += ' />';
+            str += '<p class="label">'+
+            '<label for="'+idi+'">'+tr_groups[i][1]+'</label>'+
+            '</p>'+
+            '</div>';
+        }
+        str += '</div>';
+        document.getElementById('tpay_banks').innerHTML = str;
+    }
+
+    window.onload = ShowChannels;
 
     </script>
 
