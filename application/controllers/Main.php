@@ -12,6 +12,20 @@ class Main extends MY_Controller {
 		));
 	}
 
+	public function tpay()
+	{
+		$this->load->model('transactions_model');
+		$this->load->library('Tpay');
+
+		$t = new Transaction($this->tpay);
+
+		$r = $t->create(3214, 150, 13.99, 'heniek1101@gmail.com', 'Henryk', 'test opis');
+
+		print_r($r);
+
+		echo $this->tpay->merchantId;
+	}
+
 	public function test()
 	{
 		$this->load->model('hours_model');
