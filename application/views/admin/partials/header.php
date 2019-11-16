@@ -893,6 +893,11 @@
                                             <i class="metismenu-icon"></i> Wyjątki
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="<?= base_url('admin/breaks'); ?>">
+                                            <i class="metismenu-icon"></i> Przerwy
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 

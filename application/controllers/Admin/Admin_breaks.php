@@ -11,10 +11,10 @@ class Admin_breaks extends MY_Controller {
         $this->load->model('breaks_model');
     }
 
-    /* public function index()
+    public function index()
 	{
-        $this->load->view('admin/staff/index');
-    } */
+        $this->load->view('admin/breaks/index');
+    }
 
     public function add()
     {
@@ -50,5 +50,12 @@ class Admin_breaks extends MY_Controller {
         }
 
         $this->load->view('admin/breaks/add', $view_data);
+    }
+
+    public function getBreaksDataTable()
+    {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($this->breaks_model->getBreaksDataTable($this->user->data->companyid)));
     }
 }

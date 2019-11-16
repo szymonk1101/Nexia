@@ -198,6 +198,7 @@ class Open_hours_model extends CI_Model  {
             array_push($free_blocks, [$staff_oh->time_from, $staff_oh->time_to]);
 
             $free_blocks = $this->hours_model->excludeHoursArrays($free_blocks, $reservations);
+            $free_blocks = $this->hours_model->excludeHoursArrays($free_blocks, $this->getBreaksToExclude($date, $staff_ref));
         }
 
         return $free_blocks;
@@ -276,6 +277,15 @@ class Open_hours_model extends CI_Model  {
         
         return $result;
     }
+
+    public function getBreaksToExclude($date, $staff_ref)
+    {
+        return $this->db->query("SELECT time_from, time_to FROM breaks WHERE staff_ref = '$staff_ref' AND `date` = '$date'")->result();
+    }
+
+
+
+
 
     public function getOpenHoursDataTable($company_ref, $start=0, $length=10, $search, $order, $columns)
     {
