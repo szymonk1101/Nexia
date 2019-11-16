@@ -20,7 +20,7 @@ class Breaks_model extends CI_Model  {
     }
 
 
-    public function getBreaksDataTable($company_ref, $start=0, $length=10, $search, $order, $columns)
+    public function getBreaksDataTable($company_ref)
     {
         $return = new stdClass();
         //$this->db->where('staff_ref', $staff_ref, TRUE);
@@ -28,7 +28,7 @@ class Breaks_model extends CI_Model  {
 
         //$this->db->where('staff_ref', $staff_ref, TRUE);
         //$return->recordsFiltered = $return->recordsTotal;
-        $return->data = $this->db->query("SELECT * FROM breaks WHERE staff_ref IN ( SELECT id FROM staff WHERE company_ref = '$company_ref' )")->result();
+        $return->data = $this->db->query("SELECT breaks.* FROM breaks WHERE staff_ref IN ( SELECT id FROM staff WHERE company_ref = '$company_ref' )")->result();
         //$return->data = $this->db->get('breaks')->result();
 
         return $return;
