@@ -1,7 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin_hours extends MY_Controller {
+class Admin_hours extends MY_Controller
+{
+    protected $_PERMISSIONS = array(
+        'index' => PERMISSION_HOURS_INDEX
+    );
 
     public function __construct()
 	{

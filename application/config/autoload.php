@@ -132,4 +132,4 @@ $autoload['language'] = array('polish');
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('auth_model');
+$autoload['model'] = array('auth_model', 'permissions_model');

@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class MY_Controller extends CI_Controller {
-	
+class MY_Controller extends CI_Controller
+{
 	protected $isLoggedIn;
 	public $user;
 
@@ -26,6 +26,10 @@ class MY_Controller extends CI_Controller {
 			//$this->user->data = $this->ion_auth_model->getUserHeaderData();
 		}
 		// END LOGIN SESSION
+
+		if(!$this->checkPermissions()) {
+			show_error("Nie posiadasz wystarczających uprawnień.", 403, "Brak uprawnień");
+		}
 	}
 
 	public function checkIsLoggedIn($redirect, $json = false)
@@ -47,6 +51,17 @@ class MY_Controller extends CI_Controller {
             }
         }
         return true;
+	}
+
+	public function checkPermissions()
+	{
+		$permissions = (isset($this->_PERMISSIONS)) ? $this->_PERMISSIONS : false;
+		if($permissions) {
+			if(!$this->permissions_model->isUserHavePermission($this->user->id, $this->user->data->companyid, $permissions)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public function getUserId()
