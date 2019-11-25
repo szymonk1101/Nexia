@@ -55,8 +55,20 @@ class MY_Controller extends CI_Controller
 
 	public function checkPermissions()
 	{
+		$method_name = $this->router->fetch_method();
 		$permissions = (isset($this->_PERMISSIONS)) ? $this->_PERMISSIONS : false;
 		if($permissions) {
+			if(array_key_exists($method_name, $permissions)) {
+				$permissions = $permissions[$method_name];
+			}
+			else if(array_key_exists('all', $permissions)) {
+				$permissions = $permissions['all'];
+			}
+			else {
+				return false;
+			}
+
+			$this->checkIsLoggedIn(false);
 			if(!$this->permissions_model->isUserHavePermission($this->user->id, $this->user->data->companyid, $permissions)) {
 				return false;
 			}

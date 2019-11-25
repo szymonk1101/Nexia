@@ -18,10 +18,6 @@
                                 <button type="button" data-toggle="tooltip" title="Example Tooltip" data-placement="bottom" class="btn-shadow mr-3 btn btn-success">
                                     <i class="fa fa-plus"></i>
                                 </button></a>
-                                <a href="<?= base_url('admin/staff/edit/'.$staff_id); ?>">
-                                <button type="button" class="btn-shadow mr-3 btn btn-info">
-                                    <i class="fa fa-user-edit"></i>
-                                </button></a>
                                 <div class="d-inline-block dropdown">
                                     <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
                                         <span class="btn-icon-wrapper pr-2 opacity-7">
@@ -94,7 +90,7 @@
                                     <span>Statystyki</span>
                                 </a>
                             </li>
-                            <?php if($can_show_permissions): ?>
+                            <?php if($can_edit_permissions): ?>
                             <li class="nav-item">
                                 <a role="tab" class="nav-link" id="tab-permissions" data-toggle="tab" href="#tab-content-permissions">
                                     <span>Uprawnienia</span>
@@ -203,26 +199,32 @@
                                 Staty
                             </div>
 
-                            <?php if($can_show_permissions): ?>
+                            <?php if($can_edit_permissions): ?>
                             <div class="tab-pane tabs-animation fade" id="tab-content-permissions" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="main-card mb-3 card">   
                                             <div class="card-body">
                                                 <h5 class="card-title">Uprawnienia użytkownika</h5>
-                                                <ul>
+                                                <table class="table table-borderless">
 
-                                                    <?php foreach($permissions as $p): ?>
+                                                    <?php foreach(PERMISSIONS_ARRAY as $p): ?>
                                                     
-                                                        <li><?= lang('Permission_'.$p); ?></li>
-                                                        
+                                                        <tr>
+                                                            <td><label for="permission_<?= $p; ?>"><?= lang('Permission_'.$p); ?></label></td>
+                                                            <td>
+                                                                <div class="position-relative form-check">
+                                                                    <label class="form-check-label"><input name="permissions[]" id="permission_<?= $p; ?>" type="checkbox" class="form-check-input" value="1" <?= in_array($p, $permissions) ? 'checked' : ''; ?> /> &nbsp;</label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
                                                     <?php endforeach; ?>
                                                     
-                                                </ul>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
                             </div>
                             <?php endif; ?>

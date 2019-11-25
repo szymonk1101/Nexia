@@ -25,3 +25,9 @@ $lang['YouAlreadyHaveReservationAtThisTimeConfirm'] = 'Posiadasz już rezerwacje
 $lang['ReservationHasBeenConfirmed'] = 'Rezerwacja została potwierdzona.';
 $lang['PaymentMethodIsNotCash'] = 'Metoda płatności jest inna niż gotówka.';
 $lang['ReservationPaidStatushasChanged'] = 'Status płatności rezerwacji został zmieniony.';
+
+// PERMISSIONS
+$lang['Permission_'. PERMISSION_STAFF_DETAILS] = 'Pracownicy - Podgląd';
+$lang['Permission_'. PERMISSION_STAFF_MANAGE] = 'Pracownicy - Zarządzanie';
+$lang['Permission_'. PERMISSION_STAFF_MANAGE_PERMISSIONS] = 'Pracownicy - Zarządzanie uprawnieniami';
+$lang['Permission_'. PERMISSION_HOURS_INDEX] = 'Godziny - Podgląd';

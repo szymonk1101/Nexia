@@ -1,8 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin_staff extends MY_Controller {
-
+class Admin_staff extends MY_Controller
+{
+    protected $_PERMISSIONS = array(
+        'all' => PERMISSION_STAFF_DETAILS,
+        'index' => PERMISSION_STAFF_DETAILS,
+        'details' => PERMISSION_STAFF_DETAILS,
+        'add' => PERMISSION_STAFF_MANAGE
+    );
+    
     public function __construct()
 	{
         parent::__construct();
@@ -25,10 +32,13 @@ class Admin_staff extends MY_Controller {
         if($userid) {
             $user = $this->users_model->getUserData($userid);    
 
+            $permissions = $this->permissions_model->getStaffPermissionsAsArray($staff_id);
             
             $this->load->view('admin/staff/details', array(
                 'staff_id' => $staff_id,
-                'user' => $user
+                'user' => $user,
+                'permissions' => $permissions,
+                'can_show_permissions' => $this->permissions_model->isUserHavePermission($this->user->id, $this->user->data->companyid, array(PERMISSION_STAFF_MANAGE, PERMISSION_STAFF_MANAGE_PERMISSIONS))
             ));
             return;
         }
@@ -72,6 +82,28 @@ class Admin_staff extends MY_Controller {
         }
 
         $this->load->view('admin/staff/add', $view_data);
+    }
+
+    public function edit($staff_id)
+    {
+        $staff_id = intval($staff_id);
+
+        $userid = $this->staff_model->getUserIdByStaffId($staff_id);
+        if($userid) {
+            $user = $this->users_model->getUserData($userid);    
+
+            $permissions = $this->permissions_model->getStaffPermissionsAsArray($staff_id);
+            
+            $this->load->view('admin/staff/edit', array(
+                'staff_id' => $staff_id,
+                'user' => $user,
+                'permissions' => $permissions,
+                'can_edit_permissions' => $this->permissions_model->isUserHavePermission($this->user->id, $this->user->data->companyid, PERMISSION_STAFF_MANAGE_PERMISSIONS)
+            ));
+            return;
+        }
+
+        redirect('admin/staff');
     }
     
 
